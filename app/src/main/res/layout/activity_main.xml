@@ -7,6 +7,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cs490.team_15.vibe.MainActivity">
 
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <Button
+        android:text="Search for DJs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="186dp"
+        android:id="@+id/searchDJButton" />
 </RelativeLayout>
