@@ -7,4 +7,26 @@
     <string name="prompt_spotify_password">Password</string>
     <string name="action_sign_in">Sign in</string>
 
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="Change_Theme">Change Your Theme</string>
+    <string name="prompt_password">Password</string>
+    <string name="change_password">Enter New Password</string>
+    <string name="Retype_pass">Re-Type New Password</string>
+    <string name="Old_Pass">Enter Old Password</string>
+    <string name="Chng_Pass">Change Password</string>
+    <string name="Delete_Acct">Delete Account</string>
+    <string name="Reset_Interests">Reset News Log Interests</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">Contacts permissions are needed for providing email
+        completions.</string>
+    <string name="back">Back To Account</string>
+    <string name="register_user">Submit</string>
+    <string name="back_to_login">Back To Login</string>
+    <string name="category_activity">Cetegory Selection</string>
+
 </resources>
