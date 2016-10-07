@@ -14,18 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static cs490.team_15.vibe.R.styleable.View;
-
 public class MainActivity extends AppCompatActivity {
 
-    String[] items = new String[] {"red", "blue", "green", "yellow"};
+    String[] items = new String[] {"Elizabeth Nichols", "Sarah Baker", "Johnny Arnold", "Steven Bryant"};
     ArrayList<String> listItems;
     ArrayAdapter<String> adapter;
     ListView listView;
@@ -52,10 +46,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         listView=(ListView)findViewById(R.id.listView);
-
-
-        //listView.requestFocusFromTouch();
         editText=(EditText)findViewById(R.id.txtSearch);
 
         initList();
@@ -105,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 listItems.remove(item);
             }
         }
-
         adapter.notifyDataSetChanged();
     }
 
@@ -114,7 +105,5 @@ public class MainActivity extends AppCompatActivity {
         listItems = new ArrayList<>(Arrays.asList(items));
         adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.txtitem, listItems);
         listView.setAdapter(adapter);
-
-
     }
 }
