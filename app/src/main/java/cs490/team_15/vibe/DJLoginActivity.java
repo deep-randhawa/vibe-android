@@ -19,6 +19,15 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+
 public class DJLoginActivity extends AppCompatActivity implements
         SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
@@ -68,6 +77,7 @@ public class DJLoginActivity extends AppCompatActivity implements
                         mPlayer.addNotificationCallback(DJLoginActivity.this);
 
                         printAccessToken(); // For debugging purposes
+                        getPlaylists();
                     }
 
                     @Override
@@ -133,5 +143,10 @@ public class DJLoginActivity extends AppCompatActivity implements
 
     public void printAccessToken() {
         System.out.println("Access token: " + this.accessToken);
+    }
+
+    // Use this.accessToken to get user information
+    public void getPlaylists() {
+        new SpotifyHandler().execute("", this.accessToken);
     }
 }
