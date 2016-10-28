@@ -11,7 +11,6 @@ import android.widget.Button;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
-
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Error;
@@ -19,7 +18,6 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
-
 
 public class DJLoginActivity extends AppCompatActivity implements
         SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
@@ -29,6 +27,7 @@ public class DJLoginActivity extends AppCompatActivity implements
     private static final int REQUEST_CODE = 1337;
 
     private Player mPlayer;
+    private String accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,10 @@ public class DJLoginActivity extends AppCompatActivity implements
 
         // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
+            // Get oauth access token for DJ functions
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
+            this.accessToken = response.getAccessToken();
+
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new SpotifyPlayer.InitializationObserver() {
@@ -64,6 +66,8 @@ public class DJLoginActivity extends AppCompatActivity implements
                         mPlayer = spotifyPlayer;
                         mPlayer.addConnectionStateCallback(DJLoginActivity.this);
                         mPlayer.addNotificationCallback(DJLoginActivity.this);
+
+                        printAccessToken(); // For debugging purposes
                     }
 
                     @Override
@@ -104,8 +108,7 @@ public class DJLoginActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
-
-        mPlayer.playUri(null, "spotify:track:2TpxZ7JUBn3uw46aR7qd6V", 0, 0);
+        //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
     }
 
     @Override
@@ -126,5 +129,9 @@ public class DJLoginActivity extends AppCompatActivity implements
     @Override
     public void onConnectionMessage(String message) {
         Log.d("MainActivity", "Received connection message: " + message);
+    }
+
+    public void printAccessToken() {
+        System.out.println("Access token: " + this.accessToken);
     }
 }
