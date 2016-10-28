@@ -14,8 +14,8 @@
         android:text="@string/DJ_log_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="78dp"
         android:id="@+id/logoutBtn"
-        android:layout_alignParentTop="true"
+        android:layout_marginBottom="71dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
