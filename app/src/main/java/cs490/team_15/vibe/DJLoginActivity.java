@@ -1,5 +1,7 @@
 package cs490.team_15.vibe;
 
+import android.app.ListActivity;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -34,7 +37,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class DJLoginActivity extends AppCompatActivity implements
+public class DJLoginActivity extends ListActivity implements
         SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
     private static final String CLIENT_ID = "ff502d57cc2a464fbece5c9511763cea";
@@ -43,19 +46,16 @@ public class DJLoginActivity extends AppCompatActivity implements
 
     private Player mPlayer;
     private String accessToken;
-    private SpotifyHandler spotifyHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.spotifyHandler = new SpotifyHandler();
         setContentView(R.layout.activity_djlogin);
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
         builder.setScopes(new String[] {"user-read-private", "streaming"});
         AuthenticationRequest request = builder.build();
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
-
         Button logout = (Button) findViewById(R.id.logoutBtn);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,21 +155,78 @@ public class DJLoginActivity extends AppCompatActivity implements
 
     // Use this.accessToken to get user information
     public void getPlaylists() {
-        this.spotifyHandler.execute("", this.accessToken);
+        SpotifyHandler2 spotifyHandler = new SpotifyHandler2();
+        spotifyHandler.execute("", this.accessToken);
+    }
+
+    private class SpotifyHandler2 extends AsyncTask<String, Void, String> {
+
+        /*
+        Strings[0] - Indicates which functionality to perform
+        Strings[1] - The accessToken to use to get information from the server
+        */
+        @Override
+        protected String doInBackground(String... strings) {
+            String s = "";
+            URL url;
+            HttpURLConnection urlConnection = null;
+            try {
+                url = new URL("https://api.spotify.com/v1/me/playlists");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setRequestProperty("Authorization", "Bearer " + strings[1]);
+                InputStream in = urlConnection.getInputStream();
+                InputStreamReader isw = new InputStreamReader(in);
+                int data = isw.read();
+                while (data != -1) {
+                    s += Character.toString((char)data);
+                    data = isw.read();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            return s;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            asyncGetPlaylists(result);
+        }
     }
 
     // Use this to return the playlists from the SpotifyHandler
-    public static void asyncGetPlaylists(String s) {
+    public void asyncGetPlaylists(String s) {
         try {
             JSONObject json = new JSONObject(s);
             int total = json.getInt("total");
+            String[] arr = new String[total];
+            Playlist[] pArr = new Playlist[total];
             for (int i = 0; i < total; i++) {
                 String name = json.getJSONArray("items").getJSONObject(i).getString("name");
                 String id = json.getJSONArray("items").getJSONObject(i).getString("id");
-                System.out.println(name + "\t" + id);
+                String img = json.getJSONArray("items").getJSONObject(i).getJSONArray("images").getJSONObject(0).getString("url");
+                arr[i] = name;
+                pArr[i] = new Playlist(name, id, img);
             }
+            setListAdapter(new MobileArrayAdapter(this, pArr));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Playlist p = (Playlist)getListAdapter().getItem(position);
+        System.out.println(p.getName());
+        System.out.println(p.getId());
+        System.out.println(p.getImg());
+    }
+
+    // TODO: Access songs in the playlist
+    // TODO: Receive songs from users
+    // Separate tabs for each
 }
