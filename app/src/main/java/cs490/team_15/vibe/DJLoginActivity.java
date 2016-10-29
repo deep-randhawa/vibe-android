@@ -19,6 +19,10 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,6 +31,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DJLoginActivity extends AppCompatActivity implements
         SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
@@ -37,10 +43,12 @@ public class DJLoginActivity extends AppCompatActivity implements
 
     private Player mPlayer;
     private String accessToken;
+    private SpotifyHandler spotifyHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.spotifyHandler = new SpotifyHandler();
         setContentView(R.layout.activity_djlogin);
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
@@ -147,6 +155,21 @@ public class DJLoginActivity extends AppCompatActivity implements
 
     // Use this.accessToken to get user information
     public void getPlaylists() {
-        new SpotifyHandler().execute("", this.accessToken);
+        this.spotifyHandler.execute("", this.accessToken);
+    }
+
+    // Use this to return the playlists from the SpotifyHandler
+    public static void asyncGetPlaylists(String s) {
+        try {
+            JSONObject json = new JSONObject(s);
+            int total = json.getInt("total");
+            for (int i = 0; i < total; i++) {
+                String name = json.getJSONArray("items").getJSONObject(i).getString("name");
+                String id = json.getJSONArray("items").getJSONObject(i).getString("id");
+                System.out.println(name + "\t" + id);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
