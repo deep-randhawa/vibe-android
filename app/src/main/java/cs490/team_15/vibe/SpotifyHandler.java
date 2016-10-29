@@ -11,14 +11,15 @@ import java.net.URL;
  * Created by Austin Dewey on 10/28/2016.
  */
 
-public class SpotifyHandler extends AsyncTask<String, Void, Void> {
+public class SpotifyHandler extends AsyncTask<String, String, String> {
 
     /*
         Strings[0] - Indicates which functionality to perform
         Strings[1] - The accessToken to use to get information from the server
      */
     @Override
-    protected Void doInBackground(String... strings) {
+    protected String doInBackground(String... strings) {
+        String s = "";
         URL url;
         HttpURLConnection urlConnection = null;
         try {
@@ -30,9 +31,8 @@ public class SpotifyHandler extends AsyncTask<String, Void, Void> {
             InputStreamReader isw = new InputStreamReader(in);
             int data = isw.read();
             while (data != -1) {
-                char current = (char) data;
+                s += Character.toString((char)data);
                 data = isw.read();
-                System.out.print(current);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,6 +41,7 @@ public class SpotifyHandler extends AsyncTask<String, Void, Void> {
                 urlConnection.disconnect();
             }
         }
+        DJLoginActivity.asyncGetPlaylists(s);
         return null;
     }
 }
