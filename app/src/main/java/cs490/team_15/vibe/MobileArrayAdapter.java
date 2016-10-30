@@ -28,11 +28,13 @@ import static java.util.Collections.copy;
 public class MobileArrayAdapter extends ArrayAdapter<Playlist> {
     private final Context context;
     private final Playlist[] values;
+    private final int type;
 
-    public MobileArrayAdapter(Context context, Playlist[] values) {
+    public MobileArrayAdapter(Context context, Playlist[] values, int type) {
         super(context, R.layout.activity_djlogin, values);
         this.context = context;
         this.values = values;
+        this.type = type;
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -72,9 +74,13 @@ public class MobileArrayAdapter extends ArrayAdapter<Playlist> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
         textView.setText(values[position].getName());
 
-        String img = values[position].getImg();
+        if (this.type == DJLoginActivity.PLAYLIST) {
+            String img = values[position].getImg();
+            new DownloadImageTask(imageView, img).execute();
+        }
+        else if (this.type == DJLoginActivity.SONG) {
 
-        new DownloadImageTask(imageView, img).execute();
+        }
 
         return rowView;
     }
