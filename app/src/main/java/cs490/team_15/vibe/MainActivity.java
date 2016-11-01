@@ -11,8 +11,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         /* Replace this all with Jake's implementation */
-        Intent intent = new Intent(MainActivity.this, DJLoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, DJTabbedActivity.class);
         MainActivity.this.startActivity(intent);
-        //setContentView(R.layout.activity_djlogin);
     }
 }

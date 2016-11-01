@@ -5,51 +5,18 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="cs490.team_15.vibe.MainActivity">
 
-
-    <EditText
-        android:id="@+id/txtSearch"
+    <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
-        android:hint="Search"
-        android:layout_height="wrap_content" />
-
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="36dp"
-        android:layout_height="120dp"
-        android:isScrollContainer="false">
-
-    </ListView>
-
-    <Button
-        android:text="Connect to DJ"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="118dp"
-        android:id="@+id/connectButton"
-        android:layout_width="200dp" />
+        android:id="@+id/tab_layout"
+        app:tabMode="scrollable"
+        app:tabGravity="center"
+        android:layout_below="@+id/appbar">
+    </android.support.design.widget.TabLayout>
 
-    <Button
-        android:text="DJ Login"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/connectButton"
-        android:layout_marginBottom="34dp"
-        android:id="@+id/djLoginButton"
-        android:layout_width="200dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/connectButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="47dp"
-        android:id="@+id/selectedDJText" />
-
-
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Hello World!" />
 </RelativeLayout>
