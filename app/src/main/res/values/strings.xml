@@ -32,4 +32,10 @@
 
     <string name="playback_btn">Playback</string>
     <string name="test_btn">Test</string>
+    <string name="title_activity_example">ExampleActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_demo_tab_layout">DemoTabLayout</string>
+    <string name="title_activity_djtab">DJTabActivity</string>
+    <string name="title_activity_djtabbed">DJTabbedActivity</string>
 </resources>
