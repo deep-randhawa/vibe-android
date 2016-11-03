@@ -10,8 +10,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /* Replace this all with Jake's implementation */
-        Intent intent = new Intent(MainActivity.this, DJTabbedActivity.class);
+        Intent intent = new Intent(MainActivity.this, FindDJActivity.class);
         MainActivity.this.startActivity(intent);
     }
 }

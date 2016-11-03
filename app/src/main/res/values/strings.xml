@@ -38,4 +38,8 @@
     <string name="title_activity_demo_tab_layout">DemoTabLayout</string>
     <string name="title_activity_djtab">DJTabActivity</string>
     <string name="title_activity_djtabbed">DJTabbedActivity</string>
+    <string name="title_activity_user">UserActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
