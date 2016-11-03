@@ -25,23 +25,14 @@
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".DJLoginActivity" />
-        <activity android:name=".TestActivity" />
-        <activity android:name=".TabActivity" />
-        <activity
-            android:name=".ExampleActivity"
-            android:label="@string/title_activity_example"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".DemoTabLayout"
-            android:label="@string/title_activity_demo_tab_layout"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".DJTabActivity"
-            android:label="@string/title_activity_djtab"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DJTabbedActivity"
             android:label="@string/title_activity_djtabbed"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FindDJActivity" />
+        <activity
+            android:name=".UserActivity"
+            android:label="@string/title_activity_user"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
