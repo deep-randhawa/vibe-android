@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cs490.team_15.vibe.DJLoginActivity">
+    tools:context="cs490.team_15.vibe.activites.DJLoginActivity">
 
     <ListView
         android:layout_width="match_parent"
