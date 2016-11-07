@@ -9,8 +9,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent intent = new Intent(MainActivity.this, FindDJActivity.class);
+        Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
         MainActivity.this.startActivity(intent);
     }
 }

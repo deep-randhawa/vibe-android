@@ -24,16 +24,10 @@
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".DJLoginActivity" />
         <activity
-            android:name=".DJTabbedActivity"
-            android:label="@string/title_activity_djtabbed"
+            android:name=".HomePageActivity"
+            android:label="Vibe"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FindDJActivity" />
-        <activity
-            android:name=".UserActivity"
-            android:label="@string/title_activity_user"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
