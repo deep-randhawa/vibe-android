@@ -26,11 +26,19 @@ repositories {
 }
 
 dependencies {
+    // Compile all libraries
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Spotify libs
     compile 'com.spotify.sdk:spotify-auth-beta23-noconnect-2.20b@aar'
     compile 'com.spotify.sdk:spotify-player-beta23-noconnect-2.20b@aar'
+
+    // Android libs
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
+
+    // Volley lib
+    compile 'com.android.volley:volley:1.0.0'
     testCompile 'junit:junit:4.12'
 }
