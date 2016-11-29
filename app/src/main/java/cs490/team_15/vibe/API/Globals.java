@@ -1,13 +1,18 @@
 package cs490.team_15.vibe.API;
 
+import java.util.List;
 
+import cs490.team_15.vibe.API.models.Request;
 import cs490.team_15.vibe.API.models.User;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.*;
-
-import java.util.List;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 /**
  * Created by deep on 11/17/16.
@@ -21,6 +26,7 @@ public class Globals {
 
 
     public static final UserAPI userAPI = retrofit.create(UserAPI.class);
+    public static final RequestAPI requestAPI = retrofit.create(RequestAPI.class);
 
     interface UserAPI {
         @GET("/user")
@@ -37,5 +43,16 @@ public class Globals {
 
         @DELETE("/user/{id}")
         Call<String> deleteUser(@Path("id") Integer id);
+    }
+
+    interface RequestAPI {
+        @GET("/request/{user_id}")
+        Call<List<Request>> getAllRequests(@Path("user_id") Integer userID);
+
+        @POST("/request")
+        Call<Request> createNewRequest(@Body Request request);
+
+        @DELETE("/request/{user_id}")
+        Call<String> deleteRequests(@Path("user_id") Integer userID);
     }
 }

@@ -1,12 +1,11 @@
 package cs490.team_15.vibe.API;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import cs490.team_15.vibe.API.models.User;
 import retrofit2.Call;
 import retrofit2.Response;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by deep on 11/17/16.
