@@ -1,4 +1,4 @@
-package API.models;
+package cs490.team_15.vibe.API.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
