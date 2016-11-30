@@ -7,29 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import cs490.team_15.vibe.API.RequestAPI;
-import cs490.team_15.vibe.API.models.Request;
 import cs490.team_15.vibe.API.models.User;
 
 /**
  * Created by Austin Dewey on 11/29/2016.
  */
 
-public class RequestFragment extends ListFragment implements AdapterView.OnItemClickListener {
-
-    ArrayAdapter<Request> mRequestArrayAdapter;
-    static RequestFragment mCurrentInstance;
+public class RequestFragment extends ListFragment implements AdapterView.OnItemClickListener{
 
     public RequestFragment() {
     }
 
-    public static RequestFragment getInstance() {
-        if (mCurrentInstance == null)
-            mCurrentInstance = new RequestFragment();
-        return mCurrentInstance;
-
+    public static RequestFragment newInstance() {
+        RequestFragment fragment = new RequestFragment();
+        return fragment;
     }
 
     @Override
@@ -41,20 +33,10 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.mRequestArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
-        setListAdapter(this.mRequestArrayAdapter);
+        User[] arr = {};
+        ArrayAdapter<User> adapter = new ArrayAdapter<User>(getContext(), android.R.layout.simple_list_item_1, arr);
+        setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
-
-
-    }
-
-
-    public void onLoggedIn(int id) {
-        try {
-            RequestAPI.getAllRequests(id, this.mRequestArrayAdapter);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
     }
 
     @Override

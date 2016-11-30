@@ -1,22 +1,24 @@
 package cs490.team_15.vibe;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -36,7 +38,7 @@ import cs490.team_15.vibe.API.UserAPI;
 import cs490.team_15.vibe.API.models.User;
 
 public class MainActivity extends AppCompatActivity implements
-        SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
+    SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -63,16 +65,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private boolean loggedIn = false;
 
-    private static User currentUser;
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public static void setCurrentUser(User user) {
-        currentUser = user;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,15 +83,14 @@ public class MainActivity extends AppCompatActivity implements
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // DELETED THIS //
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //fab.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        //                .setAction("Action", null).show();
-        //    }
-        //});
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
@@ -143,36 +134,30 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
-
-        // Create new DJ
-        User temp = new User("Temp2", "DJ2", "anID2", "anEmail2");
+        //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
+        /*User user = new User("Boner2", "Man", "ASDFF", "EMAILEMAIL");
         try {
-            UserAPI.createNewUser(temp, getApplicationContext());
-            System.out.println("Gets to this point");
+            System.out.println("Creating new user");
+            UserAPI.createNewUser(user);
+            System.out.println("Created new user!");
         } catch (Throwable throwable) {
             throwable.printStackTrace();
+            System.out.println("Failed to create a new user");
         }
-
-        // Get Requests that have been sent to the selected DJ
-        // Get the DJ id number that has been selected from what Joe and Jake
-        // are doing
-        User u = getCurrentUser();
-        RequestFragment.getInstance().onLoggedIn(u.id);
-        //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
+        System.out.println("IWOEJGWOIEKXCKBWROGJWOWEI");*/
+        /*try {
+            List<User> list = UserAPI.getAllUsers();
+            System.out.println("This is working");
+            Log.d("MainActivity", "This is working");
+            System.out.println(list);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }*/
     }
 
     @Override
     public void onLoggedOut() {
         Log.d("MainActivity", "User logged out");
-
-        // Delete the DJ that logged out from the DB
-        User u = getCurrentUser();
-        try {
-            // Replace the first arg with the logged in DJ id number
-            UserAPI.deleteUser(u.id, getApplicationContext());
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
     }
 
     @Override
@@ -274,9 +259,8 @@ public class MainActivity extends AppCompatActivity implements
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.searchText);
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            textView.setText("This is where songs will appear from the search");
             return rootView;
         }
     }
@@ -295,8 +279,8 @@ public class MainActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 2) {
-                return RequestFragment.getInstance();
+            if (position == 1) {
+                return RequestFragment.newInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
@@ -304,17 +288,15 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public int getCount() {
             // Show 2 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "DJs";
-                case 1:
                     return "Search";
-                case 2:
+                case 1:
                     return "Requests";
             }
             return null;
