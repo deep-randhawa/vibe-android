@@ -1,7 +1,8 @@
 package cs490.team_15.vibe.API;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import cs490.team_15.vibe.API.models.User;
 import retrofit2.Call;
@@ -13,93 +14,93 @@ import retrofit2.Response;
 
 public class UserAPI {
 
-    public synchronized static List<User> getAllUsers() throws Throwable {
+    public static List<User> getAllUsers() throws Throwable {
         Call<List<User>> call_users = Globals.userAPI.getAllUsers();
-        CompletableFuture<List<User>> futureUsers = new CompletableFuture<>();
+        final BlockingQueue<List<User>> users = new ArrayBlockingQueue<>(1);
 
         VibeCallback<List<User>> callback = new VibeCallback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                futureUsers.complete(response.body());
+                users.add(response.body());
             }
         };
 
         call_users.enqueue(callback);
-        futureUsers.join();
-        if (!callback.didErrorOccur())
-            return futureUsers.get();
-        throw callback.getErrorThrowable();
+        List<User> tmpUsers = users.take();
+        if (!callback.didErrorOccur()) {
+            return tmpUsers;
+        } else
+            throw callback.getErrorThrowable();
     }
 
-    public synchronized static User getUser(Integer id) throws Throwable {
-        Call<User> call_user = Globals.userAPI.getUser(id);
-        CompletableFuture<User> futureUser = new CompletableFuture<>();
+//    public static User getUser(Integer id) throws Throwable {
+//        Call<User> call_user = Globals.userAPI.getUser(id);
+//
+//        VibeCallback<User> callback = new VibeCallback<User>() {
+//            @Override
+//            public void onResponse(Call<User> call, Response<User> response) {
+//                futureUser.complete(response.body());
+//            }
+//        };
+//
+//        call_user.enqueue(callback);
+//        futureUser.join();
+//        if (!callback.didErrorOccur())
+//            return futureUser.get();
+//        throw callback.getErrorThrowable();
+//    }
 
-        VibeCallback<User> callback = new VibeCallback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                futureUser.complete(response.body());
-            }
-        };
-
-        call_user.enqueue(callback);
-        futureUser.join();
-        if (!callback.didErrorOccur())
-            return futureUser.get();
-        throw callback.getErrorThrowable();
-    }
-
-    public synchronized static User createNewUser(User user) throws Throwable {
+    public static User createNewUser(User user) throws Throwable {
         Call<User> call_user = Globals.userAPI.createNewUser(user);
-        CompletableFuture<User> futureUser = new CompletableFuture<>();
+        final BlockingQueue<User> newUser = new ArrayBlockingQueue<User>(1);
 
         VibeCallback<User> callback = new VibeCallback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                futureUser.complete(response.body());
+                newUser.add(response.body());
             }
         };
 
         call_user.enqueue(callback);
-        futureUser.join();
-        if (!callback.didErrorOccur())
-            return futureUser.get();
-        throw callback.getErrorThrowable();
+//        futureUser.join();
+        User t = newUser.take();
+        if (!callback.didErrorOccur()) {
+            return t;
+        } else
+            throw callback.getErrorThrowable();
     }
 
-    public synchronized static String modifyUser(Integer id, User user) throws Throwable {
-        Call<String> call_response = Globals.userAPI.modifyUser(id, user);
-        CompletableFuture<String> futureResponse = new CompletableFuture<>();
-
-        VibeCallback<String> callback = new VibeCallback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                futureResponse.complete(response.body());
-            }
-        };
-
-        call_response.enqueue(callback);
-        futureResponse.join();
-        if (!callback.didErrorOccur())
-            return futureResponse.get();
-        throw callback.getErrorThrowable();
-    }
-
-    public synchronized static String deleteUser(Integer id) throws Throwable {
-        Call<String> call_response = Globals.userAPI.deleteUser(id);
-        CompletableFuture<String> futureResponse = new CompletableFuture<>();
-
-        VibeCallback<String> callback = new VibeCallback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                futureResponse.complete(response.body());
-            }
-        };
-
-        call_response.enqueue(callback);
-        futureResponse.join();
-        if (!callback.didErrorOccur())
-            return futureResponse.get();
-        throw callback.getErrorThrowable();
-    }
+//    public static String modifyUser(Integer id, User user) throws Throwable {
+//        Call<String> call_response = Globals.userAPI.modifyUser(id, user);
+//
+//        VibeCallback<String> callback = new VibeCallback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                futureResponse.complete(response.body());
+//            }
+//        };
+//
+//        call_response.enqueue(callback);
+//        futureResponse.join();
+//        if (!callback.didErrorOccur())
+//            return futureResponse.get();
+//        throw callback.getErrorThrowable();
+//    }
+//
+//    public static String deleteUser(Integer id) throws Throwable {
+//        Call<String> call_response = Globals.userAPI.deleteUser(id);
+//
+//        VibeCallback<String> callback = new VibeCallback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                futureResponse.complete(response.body());
+//            }
+//        };
+//
+//        call_response.enqueue(callback);
+//        futureResponse.join();
+//        if (!callback.didErrorOccur())
+//            return futureResponse.get();
+//        throw callback.getErrorThrowable();
+//    }
 }
