@@ -22,21 +22,21 @@ public abstract class VibeCallback<T> implements Callback<T> {
     public Throwable getErrorThrowable() {
         return this.throwable;
     }
+}
 
-    private class VibeException extends RuntimeException {
-        public VibeException() {
-        }
+class VibeException extends Exception {
+    public VibeException() {
+    }
 
-        public VibeException(String detailMessage) {
-            super(detailMessage);
-        }
+    public VibeException(String detailMessage) {
+        super(detailMessage);
+    }
 
-        public VibeException(String detailMessage, Throwable throwable) {
-            super(detailMessage, throwable);
-        }
+    public VibeException(String detailMessage, Throwable throwable) {
+        super(detailMessage, throwable);
+    }
 
-        public VibeException(Throwable throwable) {
-            super(throwable);
-        }
+    public VibeException(Throwable throwable) {
+        super(throwable);
     }
 }

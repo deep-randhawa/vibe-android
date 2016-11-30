@@ -1,5 +1,7 @@
 package cs490.team_15.vibe.API;
 
+import android.util.Log;
+
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -21,16 +23,18 @@ public class UserAPI {
         VibeCallback<List<User>> callback = new VibeCallback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                Log.d("GOT USERS", response.body().toString());
                 users.add(response.body());
             }
         };
 
         call_users.enqueue(callback);
-        List<User> tmpUsers = users.take();
-        if (!callback.didErrorOccur()) {
-            return tmpUsers;
-        } else
-            throw callback.getErrorThrowable();
+//        List<User> tmpUsers = users.take();
+//        if (!callback.didErrorOccur()) {
+//            return tmpUsers;
+//        } else
+//            throw callback.getErrorThrowable();
+        return null;
     }
 
 //    public static User getUser(Integer id) throws Throwable {
@@ -57,17 +61,20 @@ public class UserAPI {
         VibeCallback<User> callback = new VibeCallback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                Log.d("NEW USER FROM CLASS", response.body().toString());
                 newUser.add(response.body());
             }
         };
 
         call_user.enqueue(callback);
 //        futureUser.join();
-        User t = newUser.take();
-        if (!callback.didErrorOccur()) {
-            return t;
-        } else
-            throw callback.getErrorThrowable();
+        return null;
+//        while (newUser.peek() == null)
+//            continue;
+//        if (!callback.didErrorOccur()) {
+//            return newUser.peek();
+//        } else
+//            throw callback.getErrorThrowable();
     }
 
 //    public static String modifyUser(Integer id, User user) throws Throwable {
