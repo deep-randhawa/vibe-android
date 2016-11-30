@@ -1,6 +1,6 @@
 package cs490.team_15.vibe.API;
 
-import android.app.Activity;
+import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -27,22 +27,22 @@ public class UserAPI {
         });
     }
 
-    public static void createNewUser(User user, final Activity currentActivity) throws Throwable {
+    public static void createNewUser(User user, final Context currentActivityContext) throws Throwable {
         Call<User> call_user = Globals.userAPI.createNewUser(user);
         call_user.enqueue(new VibeCallback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                Toast.makeText(currentActivity.getApplicationContext(), "New User created", Toast.LENGTH_SHORT);
+                Toast.makeText(currentActivityContext, "New User created", Toast.LENGTH_SHORT);
             }
         });
     }
 
-    public static void deleteUser(Integer id, final Activity activity) throws Throwable {
+    public static void deleteUser(Integer id, final Context currentActivityContext) throws Throwable {
         Call<String> call_string = Globals.userAPI.deleteUser(id);
         call_string.enqueue(new VibeCallback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Toast.makeText(activity.getApplicationContext(), "Deleted User", Toast.LENGTH_SHORT);
+                Toast.makeText(currentActivityContext, "Deleted User", Toast.LENGTH_SHORT);
             }
         });
     }

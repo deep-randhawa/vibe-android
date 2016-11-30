@@ -1,24 +1,22 @@
 package cs490.team_15.vibe;
 
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -32,8 +30,13 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.util.List;
+
+import cs490.team_15.vibe.API.UserAPI;
+import cs490.team_15.vibe.API.models.User;
+
 public class MainActivity extends AppCompatActivity implements
-    SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
+        SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -129,7 +132,26 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
-        mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
+        RequestFragment.getInstance().onLoggedIn();
+        //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
+        /*User user = new User("Boner2", "Man", "ASDFF", "EMAILEMAIL");
+        try {
+            System.out.println("Creating new user");
+            UserAPI.createNewUser(user);
+            System.out.println("Created new user!");
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            System.out.println("Failed to create a new user");
+        }
+        System.out.println("IWOEJGWOIEKXCKBWROGJWOWEI");*/
+        /*try {
+            List<User> list = UserAPI.getAllUsers();
+            System.out.println("This is working");
+            Log.d("MainActivity", "This is working");
+            System.out.println(list);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }*/
     }
 
     @Override
@@ -256,6 +278,9 @@ public class MainActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            if (position == 1) {
+                return RequestFragment.getInstance();
+            }
             return PlaceholderFragment.newInstance(position + 1);
         }
 
