@@ -46,10 +46,9 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     }
 
 
-    // TODO: 11/30/16
     public void onLoggedIn() {
         try {
-            RequestAPI.createNewRequest(new Request(1, 1), getActivity().getApplicationContext());
+            // TODO: 11/29/16 change 1 to current userID
             RequestAPI.getAllRequests(1, this.mRequestArrayAdapter);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
