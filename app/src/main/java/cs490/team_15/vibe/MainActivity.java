@@ -30,6 +30,8 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.util.List;
+
 import cs490.team_15.vibe.API.UserAPI;
 import cs490.team_15.vibe.API.models.User;
 
@@ -132,8 +134,9 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("MainActivity", "User logged in");
         User user = null;
         try {
-            user = UserAPI.createNewUser(new User("deep", "randhawa", "1", "drandhaw@purdue.edu"));
-            Log.d("NEW USER", "Created user=" + user.toString());
+            List<User> users = UserAPI.getAllUsers();
+            // user = UserAPI.createNewUser(new User("deep", "randhawa", "1231231123", "drandhaw@purdue.edu"));
+            Log.d("NEW USER", "Created user=" + users.toString());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
