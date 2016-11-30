@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
+        RequestFragment.getInstance().onLoggedIn();
         //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
         /*User user = new User("Boner2", "Man", "ASDFF", "EMAILEMAIL");
         try {
@@ -280,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 1) {
-                return RequestFragment.newInstance();
+                return RequestFragment.getInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

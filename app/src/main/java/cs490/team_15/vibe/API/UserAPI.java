@@ -7,7 +7,6 @@ import android.widget.Toast;
 import java.util.List;
 
 import cs490.team_15.vibe.API.models.User;
-import cs490.team_15.vibe.MainActivity;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -33,7 +32,6 @@ public class UserAPI {
         call_user.enqueue(new VibeCallback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                MainActivity.setCurrentUser(response.body());
                 Toast.makeText(currentActivityContext, "New User created", Toast.LENGTH_SHORT);
             }
         });
@@ -44,7 +42,6 @@ public class UserAPI {
         call_string.enqueue(new VibeCallback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                MainActivity.setCurrentUser(null);
                 Toast.makeText(currentActivityContext, "Deleted User", Toast.LENGTH_SHORT);
             }
         });
