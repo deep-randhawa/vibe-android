@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by deep on 11/17/16.
  */
+
 public class User {
 
     @SerializedName("id")
