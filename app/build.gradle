@@ -1,22 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "cs490.team_15.vibe"
-        minSdkVersion 24
-        targetSdkVersion 25
+        minSdkVersion 21
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        jackOptions {
-            enabled true
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
         release {
@@ -39,9 +32,9 @@ dependencies {
     compile 'com.spotify.sdk:spotify-auth-beta23-noconnect-2.20b@aar'
     compile 'com.spotify.sdk:spotify-player-beta23-noconnect-2.20b@aar'
     // Android libs
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
     // Retrofit libraries
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'

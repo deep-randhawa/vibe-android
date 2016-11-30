@@ -40,4 +40,15 @@ public class User {
     public User(String firstName, String lastName, String spotifyID, String email) {
         this(null, firstName, lastName, spotifyID, email);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", spotifyID='" + spotifyID + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

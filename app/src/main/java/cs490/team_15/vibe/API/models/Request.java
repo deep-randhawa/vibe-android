@@ -28,4 +28,13 @@ public class Request {
     public Request(Integer userID, Integer songID) {
         this(null, userID, songID);
     }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "id=" + id +
+                ", userID=" + userID +
+                ", songID=" + songID +
+                '}';
+    }
 }

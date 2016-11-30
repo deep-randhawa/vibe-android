@@ -14,7 +14,7 @@ import cs490.team_15.vibe.API.models.User;
  * Created by Austin Dewey on 11/29/2016.
  */
 
-public class RequestFragment extends ListFragment implements AdapterView.OnItemClickListener{
+public class RequestFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     public RequestFragment() {
     }
@@ -33,7 +33,7 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        User[] arr = {};
+        User[] arr = {new User("a", "a", "a", "a"), new User("b", "b", "b", "b")};
         ArrayAdapter<User> adapter = new ArrayAdapter<User>(getContext(), android.R.layout.simple_list_item_1, arr);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
