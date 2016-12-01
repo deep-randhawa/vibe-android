@@ -144,7 +144,8 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("MainActivity", "User logged in");
 
         // Create new DJ
-        User temp = new User("Temp2", "DJ2", "anID2", "anEmail2");
+        // User: First Name, Last Name, Spotify ID, email
+        User temp = new User("aweasdf", "waeawgwegaw", "awegawegwa", "wegwawege");
         try {
             UserAPI.createNewUser(temp, getApplicationContext());
             System.out.println("Gets to this point");
@@ -155,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements
         // Get Requests that have been sent to the selected DJ
         // Get the DJ id number that has been selected from what Joe and Jake
         // are doing
+        while (getCurrentUser() == null) {}     // Infinite loop!
         User u = getCurrentUser();
         RequestFragment.getInstance().onLoggedIn(u.id);
         //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);

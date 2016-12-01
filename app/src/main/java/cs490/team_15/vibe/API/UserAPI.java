@@ -33,6 +33,8 @@ public class UserAPI {
         call_user.enqueue(new VibeCallback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                User u = response.body();
+                System.out.println("User id number is " + u.id);
                 MainActivity.setCurrentUser(response.body());
                 Toast.makeText(currentActivityContext, "New User created", Toast.LENGTH_SHORT);
             }
