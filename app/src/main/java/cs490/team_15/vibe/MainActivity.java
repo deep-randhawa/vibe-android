@@ -280,8 +280,11 @@ public class MainActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 1) {
+            if (position == 2) {
                 return RequestFragment.getInstance();
+            }
+            if (position == 0) {
+                return DjFragment.getInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
@@ -289,15 +292,17 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public int getCount() {
             // Show 2 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Search";
+                    return "DJs";
                 case 1:
+                    return "Search";
+                case 2:
                     return "Requests";
             }
             return null;
