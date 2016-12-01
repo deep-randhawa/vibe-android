@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import cs490.team_15.vibe.API.RequestAPI;
 import cs490.team_15.vibe.API.models.Request;
@@ -43,6 +44,8 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
         this.mRequestArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         setListAdapter(this.mRequestArrayAdapter);
         getListView().setOnItemClickListener(this);
+
+
     }
 
 
