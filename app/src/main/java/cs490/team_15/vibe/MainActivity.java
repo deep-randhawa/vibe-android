@@ -132,31 +132,34 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
-        RequestFragment.getInstance().onLoggedIn();
-        //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
-        /*User user = new User("Boner2", "Man", "ASDFF", "EMAILEMAIL");
+
+        // Create new DJ
+        User temp = new User("Temp2", "DJ2", "anID2", "anEmail2");
         try {
-            System.out.println("Creating new user");
-            UserAPI.createNewUser(user);
-            System.out.println("Created new user!");
+            UserAPI.createNewUser(temp, getApplicationContext());
+            System.out.println("Gets to this point");
         } catch (Throwable throwable) {
             throwable.printStackTrace();
-            System.out.println("Failed to create a new user");
         }
-        System.out.println("IWOEJGWOIEKXCKBWROGJWOWEI");*/
-        /*try {
-            List<User> list = UserAPI.getAllUsers();
-            System.out.println("This is working");
-            Log.d("MainActivity", "This is working");
-            System.out.println(list);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }*/
+
+        // Get Requests that have been sent to the selected DJ
+        // Get the DJ id number that has been selected from what Joe and Jake
+        // are doing
+        RequestFragment.getInstance().onLoggedIn(1);
+        //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
     }
 
     @Override
     public void onLoggedOut() {
         Log.d("MainActivity", "User logged out");
+
+        // Delete the DJ that logged out from the DB
+        try {
+            // Replace the first arg with the logged in DJ id number
+            UserAPI.deleteUser(0, getApplicationContext());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Override
