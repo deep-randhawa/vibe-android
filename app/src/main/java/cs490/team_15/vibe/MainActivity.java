@@ -63,6 +63,16 @@ public class MainActivity extends AppCompatActivity implements
 
     private boolean loggedIn = false;
 
+    private static User currentUser;
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
