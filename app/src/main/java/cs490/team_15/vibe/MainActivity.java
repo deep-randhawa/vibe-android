@@ -142,17 +142,36 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
-        // Create the user
 
-        // Populate the ListView in the RequestFragment with the songs that
-        // correspond with the DJ that is logged in
-        RequestFragment.getInstance().onLoggedIn();
+        // Create new DJ
+        User temp = new User("Temp2", "DJ2", "anID2", "anEmail2");
+        try {
+            UserAPI.createNewUser(temp, getApplicationContext());
+            System.out.println("Gets to this point");
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+        // Get Requests that have been sent to the selected DJ
+        // Get the DJ id number that has been selected from what Joe and Jake
+        // are doing
+        User u = getCurrentUser();
+        RequestFragment.getInstance().onLoggedIn(u.id);
         //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
     }
 
     @Override
     public void onLoggedOut() {
         Log.d("MainActivity", "User logged out");
+
+        // Delete the DJ that logged out from the DB
+        User u = getCurrentUser();
+        try {
+            // Replace the first arg with the logged in DJ id number
+            UserAPI.deleteUser(u.id, getApplicationContext());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     @Override
