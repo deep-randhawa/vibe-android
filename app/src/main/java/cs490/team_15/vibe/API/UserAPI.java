@@ -5,6 +5,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 import cs490.team_15.vibe.API.models.User;
 import cs490.team_15.vibe.MainActivity;
@@ -16,6 +17,13 @@ import retrofit2.Response;
  */
 
 public class UserAPI {
+
+    public static User generateRandomUser() {
+        return new User(UUID.randomUUID().toString().substring(0, 4),
+                UUID.randomUUID().toString().substring(0, 4),
+                UUID.randomUUID().toString().substring(0, 4),
+                UUID.randomUUID().toString().substring(0, 4));
+    }
 
     public static void getAllUsers(final ArrayAdapter<User> userArrayAdapter) throws Throwable {
         Call<List<User>> call_users = Globals.userAPI.getAllUsers();

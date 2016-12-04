@@ -32,6 +32,7 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.List;
 
+import cs490.team_15.vibe.API.RequestAPI;
 import cs490.team_15.vibe.API.UserAPI;
 import cs490.team_15.vibe.API.models.User;
 
@@ -64,9 +65,9 @@ public class MainActivity extends AppCompatActivity implements
     private boolean loggedIn = false;
     private Menu menu;
 
-    private static User currentUser;
+    private volatile static User currentUser;
 
-    public User getCurrentUser() {
+    public static User getCurrentUser() {
         return currentUser;
     }
 
@@ -96,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onPageSelected(int position) {
-
+                if (position == 1)
+                    RequestAPI.getAllRequests(1, RequestFragment.getInstance().mRequestArrayAdapter);
             }
 
             @Override
@@ -162,14 +164,12 @@ public class MainActivity extends AppCompatActivity implements
         item.setTitle("DJ Logout");
         // Create new DJ
         // User: First Name, Last Name, Spotify ID, email
-        User temp = new User("aweasdf", "waeawgwegaw", "awegawegwa", "wegwawege");
+        User temp = UserAPI.generateRandomUser();
         try {
             UserAPI.createNewUser(temp, getApplicationContext());
-            System.out.println("Gets to this point");
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-
         // Get Requests that have been sent to the selected DJ
         // Get the DJ id number that has been selected from what Joe and Jake
         // are doing
@@ -317,6 +317,8 @@ public class MainActivity extends AppCompatActivity implements
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 1) {
+                if (RequestFragment.getInstance().mRequestArrayAdapter != null)
+                    RequestAPI.getAllRequests(1, RequestFragment.getInstance().mRequestArrayAdapter);
                 return RequestFragment.getInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
