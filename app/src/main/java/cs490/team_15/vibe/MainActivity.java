@@ -1,6 +1,7 @@
 package cs490.team_15.vibe;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,8 +31,6 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-import java.util.List;
-
 import cs490.team_15.vibe.API.RequestAPI;
 import cs490.team_15.vibe.API.UserAPI;
 import cs490.team_15.vibe.API.models.User;
@@ -53,18 +52,17 @@ public class MainActivity extends AppCompatActivity implements
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
-    private static final String CLIENT_ID = "ff502d57cc2a464fbece5c9511763cea";
-    private static final String REDIRECT_URI = "localhost://callback";
-    private static final int REQUEST_CODE = 1337;
-
     private Player mPlayer;
-    private String accessToken;
-    private AuthenticationRequest request;
+    private String mAccessToken;
+    private AuthenticationRequest mAuthRequest;
+    private boolean mLoggedIn = false;
 
-    private boolean loggedIn = false;
+    private static Resources mResources;
+    private static volatile User currentUser;
 
-    private volatile static User currentUser;
+    private static final String CLIENT_ID = mResources.getString(R.string.spotify_client_id);
+    private static final String REDIRECT_URI = mResources.getString(R.string.spotify_redirect_uri);
+    private static final int REQUEST_CODE = mResources.getInteger(R.integer.spotify_request_code);
 
     public static User getCurrentUser() {
         return currentUser;
@@ -74,10 +72,16 @@ public class MainActivity extends AppCompatActivity implements
         currentUser = user;
     }
 
+    private static final int NUM_TABS = 2;
+    private static final int SEARCH_TAB_INDEX = 0;
+    private static final int REQUEST_TAB_INDEX = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mResources = getResources();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 1)
-                    RequestAPI.getAllRequests(1, RequestFragment.getInstance().mRequestArrayAdapter);
+                if (position == REQUEST_TAB_INDEX)
+                    RequestAPI.getAllRequests(getCurrentUser().id, RequestFragment.getInstance().mRequestArrayAdapter);
             }
 
             @Override
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-private", "streaming"});
-        this.request = builder.build();
+        this.mAuthRequest = builder.build();
     }
 
 
@@ -140,17 +144,17 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         // Log the DJ in
-        if (id == R.id.action_login && this.loggedIn == false) {
-            AuthenticationClient.openLoginActivity(this, REQUEST_CODE, this.request);
-            this.loggedIn = true;
-            item.setTitle("DJ Logout");
+        if (id == R.id.action_login && this.mLoggedIn == false) {
+            AuthenticationClient.openLoginActivity(this, REQUEST_CODE, this.mAuthRequest);
+            this.mLoggedIn = true;
+            item.setTitle(getString(R.string.dj_login));
             return true;
         }
         // Log the DJ out
-        else if (id == R.id.action_login && this.loggedIn == true) {
+        else if (id == R.id.action_login && this.mLoggedIn == true) {
             mPlayer.logout();
-            this.loggedIn = false;
-            item.setTitle("DJ Login");
+            this.mLoggedIn = false;
+            item.setTitle(getString(R.string.dj_login));
             return true;
         }
 
@@ -228,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements
         if (requestCode == REQUEST_CODE) {
             // Get oauth access token for DJ functions
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
-            this.accessToken = response.getAccessToken();
+            this.mAccessToken = response.getAccessToken();
 
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
@@ -304,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 1) {
+            if (position == REQUEST_TAB_INDEX) {
                 if (RequestFragment.getInstance().mRequestArrayAdapter != null)
                     RequestAPI.getAllRequests(1, RequestFragment.getInstance().mRequestArrayAdapter);
                 return RequestFragment.getInstance();
@@ -314,16 +318,15 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
-            return 2;
+            return NUM_TABS;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0:
+                case SEARCH_TAB_INDEX:
                     return "Search";
-                case 1:
+                case REQUEST_TAB_INDEX:
                     return "Requests";
             }
             return null;

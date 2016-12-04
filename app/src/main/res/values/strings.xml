@@ -45,4 +45,13 @@
     <string name="title_activity_home_page">HomePageActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <!-- Personal String for the Vibe App -->
+    <!-- Spotify things -->
+    <string name="spotify_client_id">ff502d57cc2a464fbece5c9511763cea</string>
+    <string name="spotify_redirect_uri">localhost://callback</string>
+    <integer name="spotify_request_code">1337</integer>
+
+    <string name="dj_logout">DJ Logout</string>
+    <string name="dj_login">DJ Login</string>
 </resources>
