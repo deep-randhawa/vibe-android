@@ -21,6 +21,9 @@ public class RequestAPI {
             @Override
             public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
                 requestArrayAdapter.clear();
+                for (Request r : response.body()) {
+                    System.out.println(r);
+                }
                 requestArrayAdapter.addAll(response.body());
             }
         });

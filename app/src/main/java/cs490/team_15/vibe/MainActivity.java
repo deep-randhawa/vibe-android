@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements
     private AuthenticationRequest request;
 
     private boolean loggedIn = false;
+    private Menu menu;
 
     private static User currentUser;
 
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -125,14 +127,12 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.action_login && this.loggedIn == false) {
             AuthenticationClient.openLoginActivity(this, REQUEST_CODE, this.request);
             this.loggedIn = true;
-            item.setTitle("DJ Logout");
             return true;
         }
         // Log the DJ out
         else if (id == R.id.action_login && this.loggedIn == true) {
             mPlayer.logout();
             this.loggedIn = false;
-            item.setTitle("DJ Login");
             return true;
         }
 
@@ -142,7 +142,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
-
+        MenuItem item = menu.findItem(R.id.action_login);
+        item.setTitle("DJ Logout");
         // Create new DJ
         // User: First Name, Last Name, Spotify ID, email
         User temp = new User("aweasdf", "waeawgwegaw", "awegawegwa", "wegwawege");
@@ -156,16 +157,19 @@ public class MainActivity extends AppCompatActivity implements
         // Get Requests that have been sent to the selected DJ
         // Get the DJ id number that has been selected from what Joe and Jake
         // are doing
-        while (getCurrentUser() == null) {}     // Infinite loop!
-        User u = getCurrentUser();
-        RequestFragment.getInstance().onLoggedIn(u.id);
+        /*while (getCurrentUser() == null) {}     // Infinite loop!
+
+        User u = getCurrentUser();*/
+        RequestFragment.getInstance().onLoggedIn(1);
         //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
     }
 
     @Override
     public void onLoggedOut() {
         Log.d("MainActivity", "User logged out");
-
+        MenuItem item = menu.findItem(R.id.action_login);
+        item.setTitle("DJ Login");
+        /*
         // Delete the DJ that logged out from the DB
         User u = getCurrentUser();
         try {
@@ -174,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+        */
     }
 
     @Override
