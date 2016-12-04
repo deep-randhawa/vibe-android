@@ -60,9 +60,9 @@ public class MainActivity extends AppCompatActivity implements
     private static Resources mResources;
     private static volatile User currentUser;
 
-    private static final String CLIENT_ID = mResources.getString(R.string.spotify_client_id);
-    private static final String REDIRECT_URI = mResources.getString(R.string.spotify_redirect_uri);
-    private static final int REQUEST_CODE = mResources.getInteger(R.integer.spotify_request_code);
+    private static final String CLIENT_ID = "ff502d57cc2a464fbece5c9511763cea";
+    private static final String REDIRECT_URI = "localhost://callback";
+    private static final int REQUEST_CODE = 1337;
 
     public static User getCurrentUser() {
         return currentUser;
@@ -100,8 +100,10 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onPageSelected(int position) {
-                if (position == REQUEST_TAB_INDEX)
+                if (position == REQUEST_TAB_INDEX) {
+                    System.out.println(getCurrentUser());
                     RequestAPI.getAllRequests(getCurrentUser().id, RequestFragment.getInstance().mRequestArrayAdapter);
+                }
             }
 
             @Override
@@ -167,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Create new DJ
         // User: First Name, Last Name, Spotify ID, email
+        // TODO: 12/4/16 change generateRandomUser to actual spotify user
         User temp = UserAPI.generateRandomUser();
         try {
             UserAPI.createNewUser(temp, getApplicationContext());

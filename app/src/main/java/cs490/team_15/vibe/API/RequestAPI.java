@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cs490.team_15.vibe.API.models.Request;
@@ -23,7 +24,7 @@ public class RequestAPI {
             @Override
             public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
                 requestArrayAdapter.clear();
-                requestArrayAdapter.addAll(response.body());
+                requestArrayAdapter.addAll(response.body() == null ? new ArrayList<Request>() : response.body());
                 requestArrayAdapter.notifyDataSetChanged();
             }
         });
