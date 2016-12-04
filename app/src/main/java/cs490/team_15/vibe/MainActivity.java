@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onPageSelected(int position) {
                 if (position == 1)
-                    RequestAPI.getAllRequests(1, RequestFragment.getInstance().mRequestArrayAdapter);
+                    RequestAPI.getAllRequests(getCurrentUser().id, RequestFragment.getInstance().mRequestArrayAdapter);
             }
 
             @Override
@@ -170,13 +170,9 @@ public class MainActivity extends AppCompatActivity implements
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-        // Get Requests that have been sent to the selected DJ
-        // Get the DJ id number that has been selected from what Joe and Jake
-        // are doing
-        /*while (getCurrentUser() == null) {}     // Infinite loop!
 
-        User u = getCurrentUser();*/
-        RequestFragment.getInstance().onLoggedIn(1);
+        /*User u = getCurrentUser();
+        RequestFragment.getInstance().onLoggedIn(u.id);*/
         //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
     }
 

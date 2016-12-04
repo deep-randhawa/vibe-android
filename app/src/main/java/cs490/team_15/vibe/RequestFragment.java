@@ -45,7 +45,7 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.mRequestArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
+        this.mRequestArrayAdapter = new ArrayAdapter<Request>(getContext(), android.R.layout.simple_list_item_1);
         setListAdapter(this.mRequestArrayAdapter);
         getListView().setOnItemClickListener(this);
     }
