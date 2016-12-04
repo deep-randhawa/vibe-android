@@ -16,12 +16,15 @@ import retrofit2.Response;
 public class RequestAPI {
 
     public static void getAllRequests(Integer userID, final ArrayAdapter<Request> requestArrayAdapter) {
+        if (userID == null)
+            return;
         Call<List<Request>> call_requests = Globals.requestAPI.getAllRequests(userID);
         call_requests.enqueue(new VibeCallback<List<Request>>() {
             @Override
             public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
                 requestArrayAdapter.clear();
                 requestArrayAdapter.addAll(response.body());
+                requestArrayAdapter.notifyDataSetChanged();
             }
         });
     }

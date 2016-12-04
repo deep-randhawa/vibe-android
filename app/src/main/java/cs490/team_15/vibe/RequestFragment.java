@@ -1,5 +1,6 @@
 package cs490.team_15.vibe;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,14 +22,18 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     ArrayAdapter<Request> mRequestArrayAdapter;
     static RequestFragment mCurrentInstance;
 
-    public RequestFragment() {
-    }
-
     public static RequestFragment getInstance() {
         if (mCurrentInstance == null)
             mCurrentInstance = new RequestFragment();
         return mCurrentInstance;
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (MainActivity.getCurrentUser() != null)
+            RequestAPI.getAllRequests(1, this.mRequestArrayAdapter);
     }
 
     @Override
@@ -45,6 +50,13 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
         getListView().setOnItemClickListener(this);
     }
 
+
+//    @Override
+//    public void onCreate() {
+//        super.onResume();
+//        if (MainActivity.getCurrentUser() != null)
+//            RequestAPI.getAllRequests(1, this.mRequestArrayAdapter);
+//    }
 
     public void onLoggedIn(int id) {
         try {
