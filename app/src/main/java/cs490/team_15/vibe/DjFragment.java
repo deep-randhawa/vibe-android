@@ -1,5 +1,6 @@
 package cs490.team_15.vibe;
 
+import android.provider.Settings;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,8 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
 
     ArrayAdapter<User> mUserArrayAdapter;
     static DjFragment mCurrentInstance;
+
+    User DJ;
 
     public DjFragment() {
     }
@@ -42,19 +45,19 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
         this.mUserArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         setListAdapter(this.mUserArrayAdapter);
         getListView().setOnItemClickListener(this);
-    }
 
-
-    public void onLoggedIn(int id) {
         try {
-             UserAPI.getAllUsers(this.mUserArrayAdapter);
+            UserAPI.getAllUsers(this.mUserArrayAdapter);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        view.setSelected(true);
+        DJ = (User)adapterView.getItemAtPosition(i);
+        System.out.println("DJ id: " + DJ.id);
     }
 }

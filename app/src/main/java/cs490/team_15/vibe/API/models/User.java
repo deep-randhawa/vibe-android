@@ -43,6 +43,7 @@ public class User {
 
     @Override
     public String toString() {
+        /*
         return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
@@ -50,5 +51,7 @@ public class User {
                 ", spotifyID='" + spotifyID + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+                */
+        return "Name: " + firstName + " " + lastName;
     }
 }
