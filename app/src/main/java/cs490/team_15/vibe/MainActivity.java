@@ -161,7 +161,9 @@ public class MainActivity extends AppCompatActivity implements
         // Create new DJ
         // User: First Name, Last Name, Spotify ID, email
         // TODO: 12/4/16 change generateRandomUser to actual spotify user
-        User temp = UserAPI.generateRandomUser();
+        //User temp = UserAPI.generateRandomUser();
+        User temp = UserAPI.generateLoggedInUser(this.mAccessToken);
+        System.out.println("Printing" + temp);
         try {
             UserAPI.createNewUser(temp, getApplicationContext());
         } catch (Throwable throwable) {
