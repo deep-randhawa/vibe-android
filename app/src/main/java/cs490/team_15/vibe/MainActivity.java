@@ -38,19 +38,7 @@ import cs490.team_15.vibe.API.models.User;
 public class MainActivity extends AppCompatActivity implements
         SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
     private Player mPlayer;
     private String mAccessToken;
@@ -59,10 +47,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private static Resources mResources;
     private static volatile User currentUser;
-
-    private static final String CLIENT_ID = "ff502d57cc2a464fbece5c9511763cea";
-    private static final String REDIRECT_URI = "localhost://callback";
-    private static final int REQUEST_CODE = 1337;
 
     public static User getCurrentUser() {
         return currentUser;
@@ -95,19 +79,16 @@ public class MainActivity extends AppCompatActivity implements
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (position == REQUEST_TAB_INDEX) {
-                    RequestAPI.getAllRequests(getCurrentUser(), RequestFragment.getInstance().mRequestArrayAdapter);
-                }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+                if (position == REQUEST_TAB_INDEX)
+                    RequestAPI.getAllRequests(getCurrentUser(), RequestFragment.getInstance().mRequestArrayAdapter);
             }
         });
 
@@ -123,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
-                AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
-        builder.setScopes(new String[]{"user-read-private", "streaming"});
+        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(mResources.getString(R.string.spotify_client_id),
+                AuthenticationResponse.Type.TOKEN, mResources.getString(R.string.spotify_redirect_uri));
+        builder.setScopes(mResources.getStringArray(R.array.spotify_scopes));
         this.mAuthRequest = builder.build();
     }
 
@@ -146,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Log the DJ in
         if (id == R.id.action_login && this.mLoggedIn == false) {
-            AuthenticationClient.openLoginActivity(this, REQUEST_CODE, this.mAuthRequest);
+            AuthenticationClient.openLoginActivity(this, mResources.getInteger(R.integer.spotify_request_code), this.mAuthRequest);
             this.mLoggedIn = true;
             item.setTitle(getString(R.string.dj_login));
             return true;
@@ -230,13 +211,13 @@ public class MainActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, intent);
 
         // Check if result comes from the correct activity
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == mResources.getInteger(R.integer.spotify_request_code)) {
             // Get oauth access token for DJ functions
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             this.mAccessToken = response.getAccessToken();
 
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
+                Config playerConfig = new Config(this, response.getAccessToken(), mResources.getString(R.string.spotify_client_id));
                 Spotify.getPlayer(playerConfig, this, new SpotifyPlayer.InitializationObserver() {
                     @Override
                     public void onInitialized(SpotifyPlayer spotifyPlayer) {

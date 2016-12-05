@@ -32,6 +32,7 @@ public class UserAPI {
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 userArrayAdapter.clear();
                 userArrayAdapter.addAll(response.body());
+                userArrayAdapter.notifyDataSetChanged();
             }
         });
     }
