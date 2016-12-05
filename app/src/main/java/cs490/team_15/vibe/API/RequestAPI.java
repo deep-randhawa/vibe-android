@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cs490.team_15.vibe.API.models.Request;
+import cs490.team_15.vibe.API.models.User;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -16,10 +17,10 @@ import retrofit2.Response;
  */
 public class RequestAPI {
 
-    public static void getAllRequests(Integer userID, final ArrayAdapter<Request> requestArrayAdapter) {
-        if (userID == null)
+    public static void getAllRequests(User user, final ArrayAdapter<Request> requestArrayAdapter) {
+        if (user == null)
             return;
-        Call<List<Request>> call_requests = Globals.requestAPI.getAllRequests(userID);
+        Call<List<Request>> call_requests = Globals.requestAPI.getAllRequests(user.id);
         call_requests.enqueue(new VibeCallback<List<Request>>() {
             @Override
             public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
@@ -40,8 +41,10 @@ public class RequestAPI {
         });
     }
 
-    public static void deleteRequests(Integer userID, final Context currentActivityContext) throws Throwable {
-        Call<String> call_str = Globals.requestAPI.deleteRequests(userID);
+    public static void deleteRequests(User user, final Context currentActivityContext) throws Throwable {
+        if (user == null)
+            return;
+        Call<String> call_str = Globals.requestAPI.deleteRequests(user.id);
         call_str.enqueue(new VibeCallback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

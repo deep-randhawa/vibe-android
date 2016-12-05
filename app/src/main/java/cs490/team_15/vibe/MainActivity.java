@@ -101,8 +101,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onPageSelected(int position) {
                 if (position == REQUEST_TAB_INDEX) {
-                    System.out.println(getCurrentUser());
-                    RequestAPI.getAllRequests(getCurrentUser().id, RequestFragment.getInstance().mRequestArrayAdapter);
+                    RequestAPI.getAllRequests(getCurrentUser(), RequestFragment.getInstance().mRequestArrayAdapter);
                 }
             }
 
@@ -183,10 +182,9 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("MainActivity", "User logged out");
 
         // Delete the DJ that logged out from the DB
-        User u = getCurrentUser();
         try {
             // Replace the first arg with the logged in DJ id number
-            UserAPI.deleteUser(u.id, getApplicationContext());
+            UserAPI.deleteUser(getCurrentUser(), getApplicationContext());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -313,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == REQUEST_TAB_INDEX) {
                 if (RequestFragment.getInstance().mRequestArrayAdapter != null)
-                    RequestAPI.getAllRequests(1, RequestFragment.getInstance().mRequestArrayAdapter);
+                    RequestAPI.getAllRequests(getCurrentUser(), RequestFragment.getInstance().mRequestArrayAdapter);
                 return RequestFragment.getInstance();
             }
             return PlaceholderFragment.newInstance(position + 1);
