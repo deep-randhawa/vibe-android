@@ -51,6 +51,12 @@
     <string name="spotify_client_id">ff502d57cc2a464fbece5c9511763cea</string>
     <string name="spotify_redirect_uri">localhost://callback</string>
     <integer name="spotify_request_code">1337</integer>
+    <string-array name="spotify_scopes">
+        <item>user-read-private</item>
+        <item>streaming</item>
+    </string-array>
+
+    <string name="user_preferences">user_preferences</string>
 
     <string name="dj_logout">DJ Logout</string>
     <string name="dj_login">DJ Login</string>

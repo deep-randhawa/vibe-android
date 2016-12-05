@@ -32,6 +32,7 @@ public class UserAPI {
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 userArrayAdapter.clear();
                 userArrayAdapter.addAll(response.body());
+                userArrayAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -47,8 +48,10 @@ public class UserAPI {
         });
     }
 
-    public static void deleteUser(Integer id, final Context currentActivityContext) throws Throwable {
-        Call<String> call_string = Globals.userAPI.deleteUser(id);
+    public static void deleteUser(User user, final Context currentActivityContext) throws Throwable {
+        if (user == null)
+            return;
+        Call<String> call_string = Globals.userAPI.deleteUser(user.id);
         call_string.enqueue(new VibeCallback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

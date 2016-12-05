@@ -1,8 +1,8 @@
 package cs490.team_15.vibe;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 
 import cs490.team_15.vibe.API.RequestAPI;
 import cs490.team_15.vibe.API.models.Request;
-import cs490.team_15.vibe.API.models.User;
 
 /**
  * Created by Austin Dewey on 11/29/2016.
@@ -32,8 +31,7 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (MainActivity.getCurrentUser() != null)
-            RequestAPI.getAllRequests(1, this.mRequestArrayAdapter);
+        RequestAPI.getAllRequests(MainActivity.getCurrentUser(), this.mRequestArrayAdapter);
     }
 
     @Override
@@ -50,17 +48,9 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
         getListView().setOnItemClickListener(this);
     }
 
-
-//    @Override
-//    public void onCreate() {
-//        super.onResume();
-//        if (MainActivity.getCurrentUser() != null)
-//            RequestAPI.getAllRequests(1, this.mRequestArrayAdapter);
-//    }
-
     public void onLoggedIn(int id) {
         try {
-            RequestAPI.getAllRequests(id, this.mRequestArrayAdapter);
+            RequestAPI.getAllRequests(MainActivity.getCurrentUser(), this.mRequestArrayAdapter);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
