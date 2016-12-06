@@ -35,7 +35,7 @@ import java.util.HashSet;
 
 public class SearchFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
-    ArrayAdapter<SearchResult> mSongArrayAdapter;
+    static ArrayAdapter<SearchResult> mSongArrayAdapter;
     Request request;
 
     public SearchFragment() {}
@@ -118,6 +118,7 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
         @Override
         protected void onPostExecute(String result) {
             ArrayList<SearchResult> arr = new ArrayList<SearchResult>();
+            mSongArrayAdapter.clear();
             try {
                 JSONObject json = new JSONObject(result);
                 for (int i = 0; i < LIMIT; i++) {
@@ -125,7 +126,7 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
                     String name = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getString("name");
                     String artist = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name");
                     String album = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getJSONObject("album").getString("name");
-                    arr.add(new SearchResult(id, name, artist, album));
+                    mSongArrayAdapter.add(new SearchResult(id, name, artist, album));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
