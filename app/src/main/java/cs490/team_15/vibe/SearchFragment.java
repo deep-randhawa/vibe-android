@@ -1,17 +1,24 @@
 package cs490.team_15.vibe;
 
-import android.os.Bundle;
+
 import android.support.v4.app.ListFragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+
+import cs490.team_15.vibe.API.models.Request;
 
 /**
  * Created by Austin Dewey on 12/5/2016.
  */
 
-public class SearchFragment extends ListFragment {
+public class SearchFragment extends ListFragment implements AdapterView.OnItemClickListener {
+
+    ArrayAdapter<Request> mSongArrayAdapter;
+    Request request;
 
     public SearchFragment() {}
 
@@ -24,7 +31,22 @@ public class SearchFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.searchText);
         return rootView;
+    }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.mSongArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
+        setListAdapter(this.mSongArrayAdapter);
+        getListView().setOnItemClickListener(this);
+        //Call function to populate with songs
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
     }
 }
