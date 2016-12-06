@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import cs490.team_15.vibe.API.models.Request;
+import cs490.team_15.vibe.API.models.SearchResult;
+
 
 /**
  * Created by Austin Dewey on 12/5/2016.
@@ -17,7 +19,7 @@ import cs490.team_15.vibe.API.models.Request;
 
 public class SearchFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
-    ArrayAdapter<Request> mSongArrayAdapter;
+    ArrayAdapter<SearchResult> mSongArrayAdapter;
     Request request;
 
     public SearchFragment() {}
