@@ -16,6 +16,9 @@ import android.widget.TextView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cs490.team_15.vibe.API.models.Request;
 import cs490.team_15.vibe.API.models.SearchResult;
 
@@ -24,6 +27,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by Austin Dewey on 12/5/2016.
@@ -71,6 +75,8 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
 
     private static class GetSearchResultsTask extends AsyncTask<String, Void, String> {
 
+        private final int LIMIT = 10;
+
         @Override
         protected String doInBackground(String... strings) {
             String temp = strings[0];
@@ -88,7 +94,7 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
             URL url;
             HttpURLConnection urlConnection = null;
             try {
-                url = new URL("https://api.spotify.com/v1/search?q=" + withoutSpaces + "&type=track&limit=10");
+                url = new URL("https://api.spotify.com/v1/search?q=" + withoutSpaces + "&type=track&limit=" + LIMIT);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestProperty("Accept", "application/json");
                 InputStream in = urlConnection.getInputStream();
@@ -111,7 +117,22 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
 
         @Override
         protected void onPostExecute(String result) {
-
+            ArrayList<SearchResult> arr = new ArrayList<SearchResult>();
+            try {
+                JSONObject json = new JSONObject(result);
+                for (int i = 0; i < LIMIT; i++) {
+                    String id = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getString("id");
+                    String name = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getString("name");
+                    String artist = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name");
+                    String album = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getJSONObject("album").getString("name");
+                    arr.add(new SearchResult(id, name, artist, album));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            for (SearchResult s : arr) {
+                System.out.println(s.id + " " + s.song_name + " " + s.artist_name + " " + s.album_name);
+            }
         }
     }
 
@@ -122,8 +143,6 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
         this.mSongArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         setListAdapter(this.mSongArrayAdapter);
         getListView().setOnItemClickListener(this);
-        //Call function to populate with songs
-
     }
 
     @Override

@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class SearchResult {
     @SerializedName("id")
     @Expose
-    public Integer id;
+    public String id;
 
     @SerializedName("song_name")
     @Expose
@@ -20,16 +20,20 @@ public class SearchResult {
     @Expose
     public String artist_name;
 
-    public SearchResult(Integer id, String songName, String artistName) {
+    public String album_name;
+
+    public SearchResult(String id, String songName, String artistName,
+                        String albumName) {
         this.id = id;
         this.song_name = songName;
         this.artist_name = artistName;
+        this.album_name = albumName;
     }
-
 
     @Override
     public String toString() {
         return "Song: " + song_name + "\n" +
-                "Artist: " + artist_name;
+                "Artist: " + artist_name + "\n" +
+                "Album: " + album_name;
     }
 }
