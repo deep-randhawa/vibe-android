@@ -130,9 +130,7 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            for (SearchResult s : arr) {
-                System.out.println(s.id + " " + s.song_name + " " + s.artist_name + " " + s.album_name);
-            }
+
         }
     }
 
