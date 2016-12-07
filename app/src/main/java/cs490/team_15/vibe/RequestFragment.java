@@ -18,8 +18,11 @@ import cs490.team_15.vibe.API.models.Request;
 
 public class RequestFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
-    ArrayAdapter<Request> mRequestArrayAdapter;
+    static ArrayAdapter<Request> mRequestArrayAdapter;
     static RequestFragment mCurrentInstance;
+
+    public RequestFragment() {
+    }
 
     public static RequestFragment getInstance() {
         if (mCurrentInstance == null)

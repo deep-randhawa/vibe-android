@@ -13,13 +13,9 @@ public class User {
     @Expose
     public Integer id;
 
-    @SerializedName("first_name")
+    @SerializedName("name")
     @Expose
-    public String firstName;
-
-    @SerializedName("last_name")
-    @Expose
-    public String lastName;
+    public String name;
 
     @SerializedName("spotify_id")
     @Expose
@@ -29,26 +25,19 @@ public class User {
     @Expose
     public String email;
 
-    public User(Integer id, String firstName, String lastName, String spotifyID, String email) {
+    public User(Integer id, String name, String spotifyID, String email) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.spotifyID = spotifyID;
         this.email = email;
     }
 
-    public User(String firstName, String lastName, String spotifyID, String email) {
-        this(null, firstName, lastName, spotifyID, email);
+    public User(String name, String spotifyID, String email) {
+        this(null, name, spotifyID, email);
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", spotifyID='" + spotifyID + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return "Name: " + name;
     }
 }

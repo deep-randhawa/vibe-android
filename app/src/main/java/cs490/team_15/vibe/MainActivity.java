@@ -1,12 +1,8 @@
 package cs490.team_15.vibe;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements
     private static Resources mResources;
     private static volatile User currentUser;
 
+    private Menu menu;
+
     public static User getCurrentUser() {
         return currentUser;
     }
@@ -58,15 +56,18 @@ public class MainActivity extends AppCompatActivity implements
         currentUser = user;
     }
 
-    private static final int NUM_TABS = 2;
-    private static final int SEARCH_TAB_INDEX = 0;
-    private static final int REQUEST_TAB_INDEX = 1;
+    private static final int NUM_TABS = 3;
+    private static final int SEARCH_TAB_INDEX = 1;
+    private static final int REQUEST_TAB_INDEX = 2;
+
+    private static final String CLIENT_ID = "ff502d57cc2a464fbece5c9511763cea";
+    private static final String REDIRECT_URI = "localhost://callback";
+    private static final int REQUEST_CODE = 1337;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mResources = getResources();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -96,16 +97,6 @@ public class MainActivity extends AppCompatActivity implements
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(mResources.getString(R.string.spotify_client_id),
                 AuthenticationResponse.Type.TOKEN, mResources.getString(R.string.spotify_redirect_uri));
         builder.setScopes(mResources.getStringArray(R.array.spotify_scopes));
@@ -117,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -148,22 +140,35 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("MainActivity", "User logged in");
-
+        MenuItem item = menu.findItem(R.id.action_login);
+        item.setTitle("DJ Logout");
         // Create new DJ
         // User: First Name, Last Name, Spotify ID, email
-        // TODO: 12/4/16 change generateRandomUser to actual spotify user
-        User temp = UserAPI.generateRandomUser();
+        //User temp = UserAPI.generateRandomUser();
+        User temp = UserAPI.generateLoggedInUser(this.mAccessToken);
+        System.out.println("Printing" + temp);
         try {
             UserAPI.createNewUser(temp, getApplicationContext());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+
+        /*User u = getCurrentUser();
+        RequestFragment.getInstance().onLoggedIn(u.id);*/
+        //mPlayer.playUri(null, "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x", 0, 0);
     }
 
     @Override
     public void onLoggedOut() {
         Log.d("MainActivity", "User logged out");
-
+        MenuItem item = menu.findItem(R.id.action_login);
+        item.setTitle("DJ Login");
+        try {
+            UserAPI.deleteUser(getCurrentUser(), getApplicationContext());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        /*
         // Delete the DJ that logged out from the DB
         try {
             // Replace the first arg with the logged in DJ id number
@@ -171,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+        */
     }
 
     @Override
@@ -292,25 +298,31 @@ public class MainActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == REQUEST_TAB_INDEX) {
+            if (position == 2) {
                 if (RequestFragment.getInstance().mRequestArrayAdapter != null)
                     RequestAPI.getAllRequests(getCurrentUser(), RequestFragment.getInstance().mRequestArrayAdapter);
                 return RequestFragment.getInstance();
             }
-            return PlaceholderFragment.newInstance(position + 1);
+            if (position == 0) {
+                return DjFragment.getInstance();
+            }
+            return SearchFragment.newInstance();
         }
 
         @Override
         public int getCount() {
-            return NUM_TABS;
+            // Show 2 total pages.
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case SEARCH_TAB_INDEX:
+                case 0:
+                    return "DJs";
+                case 1:
                     return "Search";
-                case REQUEST_TAB_INDEX:
+                case 2:
                     return "Requests";
             }
             return null;
