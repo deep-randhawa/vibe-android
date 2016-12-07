@@ -62,7 +62,7 @@ public class UserAPI {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 MainActivity.setCurrentUser(response.body());
-                Toast.makeText(currentActivityContext, "New User created", Toast.LENGTH_SHORT);
+                Toast.makeText(currentActivityContext, "New User created", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -75,7 +75,7 @@ public class UserAPI {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 MainActivity.setCurrentUser(null);
-                Toast.makeText(currentActivityContext, "Deleted User", Toast.LENGTH_SHORT);
+                Toast.makeText(currentActivityContext, "Deleted User", Toast.LENGTH_SHORT).show();
             }
         });
     }

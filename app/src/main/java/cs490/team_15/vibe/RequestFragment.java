@@ -69,7 +69,8 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
             Request r = (Request)adapterView.getItemAtPosition(i);
             Request newR = new Request(r.userID, r.songID, r.numVotes, r.songName, r.artistName, r.albumName);
             try {
-                RequestAPI.createNewRequest(newR, getContext());
+                RequestAPI.voteOnSong(r.userID, r.songID, getContext());
+                // RequestAPI.createNewRequest(newR, getContext());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
