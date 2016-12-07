@@ -52,6 +52,9 @@ public class Globals {
         @POST("/request")
         Call<Request> createNewRequest(@Body Request request);
 
+        @POST("/request/{user_id}/{song_id}")
+        Call<String> addVoteToSong(@Path("user_id") Integer userID, @Path("song_id") String songID);
+
         @DELETE("/request/{user_id}")
         Call<String> deleteRequests(@Path("user_id") Integer userID);
     }

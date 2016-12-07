@@ -1,7 +1,8 @@
 package cs490.team_15.vibe;
 
-import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.ArrayAdapter;
 
 import cs490.team_15.vibe.API.RequestAPI;
 import cs490.team_15.vibe.API.models.Request;
-import cs490.team_15.vibe.API.models.User;
 
 /**
  * Created by Austin Dewey on 11/29/2016.
@@ -18,7 +18,7 @@ import cs490.team_15.vibe.API.models.User;
 
 public class RequestFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
-    ArrayAdapter<Request> mRequestArrayAdapter;
+    static ArrayAdapter<Request> mRequestArrayAdapter;
     static RequestFragment mCurrentInstance;
 
     public RequestFragment() {
@@ -29,6 +29,12 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
             mCurrentInstance = new RequestFragment();
         return mCurrentInstance;
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        RequestAPI.getAllRequests(MainActivity.getCurrentUser(), this.mRequestArrayAdapter);
     }
 
     @Override
@@ -45,12 +51,9 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
         getListView().setOnItemClickListener(this);
     }
 
-
-    // TODO: 11/30/16
-    public void onLoggedIn() {
+    public void onLoggedIn(int id) {
         try {
-            RequestAPI.createNewRequest(new Request(1, 1), getActivity().getApplicationContext());
-            RequestAPI.getAllRequests(1, this.mRequestArrayAdapter);
+            RequestAPI.getAllRequests(MainActivity.getCurrentUser(), this.mRequestArrayAdapter);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -58,6 +61,19 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if (MainActivity.isLoggedIn()) {    // Is a DJ
 
+        }
+        else {                              // Is a partier
+            adapterView.setSelection(i);
+            Request r = (Request)adapterView.getItemAtPosition(i);
+            Request newR = new Request(r.userID, r.songID, r.numVotes, r.songName, r.artistName, r.albumName);
+            try {
+                RequestAPI.voteOnSong(r.userID, r.songID, getContext());
+                // RequestAPI.createNewRequest(newR, getContext());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }
     }
 }
