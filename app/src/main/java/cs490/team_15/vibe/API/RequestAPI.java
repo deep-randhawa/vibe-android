@@ -19,6 +19,9 @@ public class RequestAPI {
     public static void getAllRequests(User user, final ArrayAdapter<Request> requestArrayAdapter) {
         if (user == null)
             return;
+        if (requestArrayAdapter == null) {
+            return;
+        }
         Call<List<Request>> call_requests = Globals.requestAPI.getAllRequests(user.id);
         call_requests.enqueue(new VibeCallback<List<Request>>() {
             @Override
