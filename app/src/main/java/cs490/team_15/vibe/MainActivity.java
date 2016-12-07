@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity implements
     private String mAccessToken;
     private AuthenticationRequest mAuthRequest;
     private boolean mLoggedIn = false;
-    // TODO: 12/4/16 save user info into shared preferences
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mSharedPreferencesEditor;
 
     private static Resources mResources;
     private static volatile User currentUser;
@@ -71,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         mResources = getResources();
-        mSharedPreferences = getSharedPreferences(mResources.getString(R.string.user_preferences), Context.MODE_PRIVATE);
-        mSharedPreferencesEditor = mSharedPreferences.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

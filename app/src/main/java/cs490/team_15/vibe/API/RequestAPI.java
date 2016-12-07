@@ -41,6 +41,16 @@ public class RequestAPI {
         });
     }
 
+    public static void voteOnSong(Integer userID, String songID, final Context currentActivityContext) throws Throwable {
+        Call<String> call_request = Globals.requestAPI.addVoteToSong(userID, songID);
+        call_request.enqueue(new VibeCallback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(currentActivityContext, "Added vote!", Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
     public static void deleteRequests(User user, final Context currentActivityContext) throws Throwable {
         if (user == null)
             return;
