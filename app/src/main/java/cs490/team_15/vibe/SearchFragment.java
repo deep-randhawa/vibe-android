@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cs490.team_15.vibe.API.RequestAPI;
 import cs490.team_15.vibe.API.models.Request;
 import cs490.team_15.vibe.API.models.SearchResult;
 
@@ -35,7 +36,7 @@ import java.util.HashSet;
 
 public class SearchFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
-    static ArrayAdapter<SearchResult> mSongArrayAdapter;
+    static ArrayAdapter<Request> mSongArrayAdapter;
     Request request;
 
     public SearchFragment() {}
@@ -117,16 +118,17 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
 
         @Override
         protected void onPostExecute(String result) {
-            ArrayList<SearchResult> arr = new ArrayList<SearchResult>();
             mSongArrayAdapter.clear();
             try {
                 JSONObject json = new JSONObject(result);
                 for (int i = 0; i < LIMIT; i++) {
-                    String id = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getString("id");
-                    String name = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getString("name");
-                    String artist = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name");
-                    String album = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getJSONObject("album").getString("name");
-                    mSongArrayAdapter.add(new SearchResult(id, name, artist, album));
+                    String songID = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getString("id");
+                    int numVotes = 0;
+                    String songName = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getString("name");
+                    String artistName = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name");
+                    String albumName = json.getJSONObject("tracks").getJSONArray("items").getJSONObject(i).getJSONObject("album").getString("name");
+                    mSongArrayAdapter.add(new Request(null, null, songID, numVotes, songName, artistName, albumName));
+                    //mSongArrayAdapter.add(new SearchResult(id, name, artist, album));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -146,6 +148,18 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        adapterView.setSelection(i);
+        Request sr = (Request)adapterView.getItemAtPosition(i);
+        if (MainActivity.getCurrentUser() == null) {
+            System.out.println("NULL!!!");
+        }
+        else {
+            try {
+                sr.userID = MainActivity.getCurrentUser().id;
+                RequestAPI.createNewRequest(sr, getContext());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }
     }
 }

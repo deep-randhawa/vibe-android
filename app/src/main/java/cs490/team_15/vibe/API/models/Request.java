@@ -17,7 +17,7 @@ public class Request {
 
     @SerializedName("song_id")
     @Expose
-    public Integer songID;
+    public String songID;
 
     @SerializedName("num_votes")
     @Expose
@@ -35,7 +35,7 @@ public class Request {
     @Expose
     public String albumName;
 
-    public Request(Integer id, Integer userID, Integer songID, Integer numVotes,
+    public Request(Integer id, Integer userID, String songID, Integer numVotes,
                    String songName, String artistName, String albumName) {
         this.id = id;
         this.userID = userID;
@@ -46,18 +46,19 @@ public class Request {
         this.albumName = albumName;
     }
 
-    public Request(Integer userID, Integer songID, Integer numVotes,
+    public Request(Integer userID, String songID, Integer numVotes,
                    String songName, String artistName, String albumName) {
         this(null, userID, songID, numVotes, songName, artistName, albumName);
     }
 
+    public String getResult() {
+        return "Song: " + songName + "\n" +
+                "Artist: " + artistName + "\n" +
+                "Album: " + albumName;
+    }
+
     @Override
     public String toString() {
-        /*return "Request{" +
-                "id=" + id +
-                ", userID=" + userID +
-                ", songID=" + songID +
-                '}';*/
         return numVotes +
                 " - " + songName +
                 " - " + artistName +
