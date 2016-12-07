@@ -67,6 +67,12 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
         else {                              // Is a partier
             adapterView.setSelection(i);
             Request r = (Request)adapterView.getItemAtPosition(i);
+            Request newR = new Request(r.userID, r.songID, r.numVotes, r.songName, r.artistName, r.albumName);
+            try {
+                RequestAPI.createNewRequest(newR, getContext());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
         }
     }
 }
