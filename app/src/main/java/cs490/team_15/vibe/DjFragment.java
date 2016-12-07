@@ -59,7 +59,6 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
 
     }
 
-
     View updatedview = null;
 
     @Override
@@ -67,7 +66,7 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
         adapterView.setSelection(i);
         DJ = (User)adapterView.getItemAtPosition(i);
         djID = DJ.id;
-        djName = DJ.firstName;
+        djName = DJ.name;
 
         if (updatedview != null) {
             updatedview.setBackgroundColor(Color.TRANSPARENT);
@@ -75,6 +74,8 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
         updatedview = view;
         view.setBackgroundColor(Color.GRAY);
         Toast.makeText(getContext(), "Connected to DJ " + djName, Toast.LENGTH_SHORT).show();
+
+        getActivity().setTitle("Connected to DJ " + djName);
 
         //System.out.println("DJ id: " + DJ.id);
     }
