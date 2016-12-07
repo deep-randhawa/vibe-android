@@ -1,5 +1,6 @@
 package cs490.team_15.vibe;
 
+import android.graphics.Color;
 import android.provider.Settings;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import cs490.team_15.vibe.API.UserAPI;
 import cs490.team_15.vibe.API.models.User;
@@ -22,6 +25,8 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
     static DjFragment mCurrentInstance;
 
     User DJ;
+    int djID;
+    String djName;
 
     public DjFragment() {
     }
@@ -54,10 +59,23 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
 
     }
 
+
+    View updatedview = null;
+
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemClick(final AdapterView<?> adapterView, View view, int i, long l) {
         adapterView.setSelection(i);
         DJ = (User)adapterView.getItemAtPosition(i);
-        System.out.println("DJ id: " + DJ.id);
+        djID = DJ.id;
+        djName = DJ.firstName;
+
+        if (updatedview != null) {
+            updatedview.setBackgroundColor(Color.TRANSPARENT);
+        }
+        updatedview = view;
+        view.setBackgroundColor(Color.GRAY);
+        Toast.makeText(getContext(), "Connected to DJ " + djName, Toast.LENGTH_SHORT).show();
+
+        //System.out.println("DJ id: " + DJ.id);
     }
 }
