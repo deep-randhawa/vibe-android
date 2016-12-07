@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements
     private Player mPlayer;
     private String mAccessToken;
     private AuthenticationRequest mAuthRequest;
-    private boolean mLoggedIn = false;
+    private static boolean mLoggedIn = false;
     // TODO: 12/4/16 save user info into shared preferences
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mSharedPreferencesEditor;
@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements
 
     public static void setCurrentUser(User user) {
         currentUser = user;
+    }
+
+    public static boolean isLoggedIn() {
+        return mLoggedIn;
     }
 
     private static final int NUM_TABS = 3;

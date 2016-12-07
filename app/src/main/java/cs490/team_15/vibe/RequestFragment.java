@@ -61,6 +61,12 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if (MainActivity.isLoggedIn()) {    // Is a DJ
 
+        }
+        else {                              // Is a partier
+            adapterView.setSelection(i);
+            Request r = (Request)adapterView.getItemAtPosition(i);
+        }
     }
 }
