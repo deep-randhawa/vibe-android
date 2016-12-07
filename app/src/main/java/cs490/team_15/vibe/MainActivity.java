@@ -175,6 +175,11 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("MainActivity", "User logged out");
         MenuItem item = menu.findItem(R.id.action_login);
         item.setTitle("DJ Login");
+        try {
+            UserAPI.deleteUser(getCurrentUser(), getApplicationContext());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         /*
         // Delete the DJ that logged out from the DB
         try {
