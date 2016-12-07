@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +35,9 @@ import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import cs490.team_15.vibe.API.RequestAPI;
+
+import java.util.List;
+
 import cs490.team_15.vibe.API.UserAPI;
 import cs490.team_15.vibe.API.models.User;
 
@@ -67,15 +71,17 @@ public class MainActivity extends AppCompatActivity implements
     private static final int SEARCH_TAB_INDEX = 0;
     private static final int REQUEST_TAB_INDEX = 1;
 
+    private static final String CLIENT_ID = "ff502d57cc2a464fbece5c9511763cea";
+    private static final String REDIRECT_URI = "localhost://callback";
+    private static final int REQUEST_CODE = 1337;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mResources = getResources();
         mSharedPreferences = getSharedPreferences(mResources.getString(R.string.user_preferences), Context.MODE_PRIVATE);
         mSharedPreferencesEditor = mSharedPreferences.edit();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -103,16 +109,6 @@ public class MainActivity extends AppCompatActivity implements
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(mResources.getString(R.string.spotify_client_id),
                 AuthenticationResponse.Type.TOKEN, mResources.getString(R.string.spotify_redirect_uri));
         builder.setScopes(mResources.getStringArray(R.array.spotify_scopes));
@@ -160,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements
         item.setTitle("DJ Logout");
         // Create new DJ
         // User: First Name, Last Name, Spotify ID, email
-        // TODO: 12/4/16 change generateRandomUser to actual spotify user
         //User temp = UserAPI.generateRandomUser();
         User temp = UserAPI.generateLoggedInUser(this.mAccessToken);
         System.out.println("Printing" + temp);
@@ -310,25 +305,31 @@ public class MainActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == REQUEST_TAB_INDEX) {
+            if (position == 2) {
                 if (RequestFragment.getInstance().mRequestArrayAdapter != null)
                     RequestAPI.getAllRequests(getCurrentUser(), RequestFragment.getInstance().mRequestArrayAdapter);
                 return RequestFragment.getInstance();
             }
-            return PlaceholderFragment.newInstance(position + 1);
+            if (position == 0) {
+                return DjFragment.getInstance();
+            }
+            return SearchFragment.newInstance();
         }
 
         @Override
         public int getCount() {
-            return NUM_TABS;
+            // Show 2 total pages.
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case SEARCH_TAB_INDEX:
+                case 0:
+                    return "DJs";
+                case 1:
                     return "Search";
-                case REQUEST_TAB_INDEX:
+                case 2:
                     return "Requests";
             }
             return null;

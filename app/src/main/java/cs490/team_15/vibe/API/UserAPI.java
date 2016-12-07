@@ -30,7 +30,6 @@ public class UserAPI {
     public static User generateRandomUser() {
         return new User(UUID.randomUUID().toString().substring(0, 4),
                 UUID.randomUUID().toString().substring(0, 4),
-                UUID.randomUUID().toString().substring(0, 4),
                 UUID.randomUUID().toString().substring(0, 4));
     }
 
@@ -45,7 +44,6 @@ public class UserAPI {
         }
         return null;
     }
-
     public static void getAllUsers(final ArrayAdapter<User> userArrayAdapter) throws Throwable {
         Call<List<User>> call_users = Globals.userAPI.getAllUsers();
         call_users.enqueue(new VibeCallback<List<User>>() {
@@ -123,11 +121,10 @@ public class UserAPI {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            User u = new User(firstName, lastName, spotifyID, email);
+            User u = new User(firstName, spotifyID, email);
             return u;
         }
     }
-
 ////    public static User getUser(Integer id) throws Throwable {
 ////        Call<User> call_user = Globals.userAPI.getUser(id);
 ////

@@ -21,6 +21,9 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     ArrayAdapter<Request> mRequestArrayAdapter;
     static RequestFragment mCurrentInstance;
 
+    public RequestFragment() {
+    }
+
     public static RequestFragment getInstance() {
         if (mCurrentInstance == null)
             mCurrentInstance = new RequestFragment();

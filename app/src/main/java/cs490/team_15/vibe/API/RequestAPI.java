@@ -3,7 +3,6 @@ package cs490.team_15.vibe.API;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
