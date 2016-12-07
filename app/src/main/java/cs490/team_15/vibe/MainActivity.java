@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity implements
         currentUser = user;
     }
 
-    private static final int NUM_TABS = 2;
-    private static final int SEARCH_TAB_INDEX = 0;
-    private static final int REQUEST_TAB_INDEX = 1;
+    private static final int NUM_TABS = 3;
+    private static final int SEARCH_TAB_INDEX = 1;
+    private static final int REQUEST_TAB_INDEX = 2;
 
     private static final String CLIENT_ID = "ff502d57cc2a464fbece5c9511763cea";
     private static final String REDIRECT_URI = "localhost://callback";

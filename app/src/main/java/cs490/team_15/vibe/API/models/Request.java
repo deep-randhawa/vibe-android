@@ -58,9 +58,9 @@ public class Request {
                 ", userID=" + userID +
                 ", songID=" + songID +
                 '}';*/
-        return "Votes: 1 - " +
-                "Song Name - " +
-                "Artist Name - " +
-                "Album Name";
+        return numVotes +
+                " - " + songName +
+                " - " + artistName +
+                " - " + albumName;
     }
 }
