@@ -65,6 +65,7 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
     public void onItemClick(final AdapterView<?> adapterView, View view, int i, long l) {
         adapterView.setSelection(i);
         DJ = (User)adapterView.getItemAtPosition(i);
+        MainActivity.setCurrentUser(DJ);
         djID = DJ.id;
         djName = DJ.name;
 
