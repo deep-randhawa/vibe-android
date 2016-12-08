@@ -1,6 +1,7 @@
 package cs490.team_15.vibe;
 
 import android.graphics.Color;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
@@ -12,6 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import cs490.team_15.vibe.API.RequestAPI;
 import cs490.team_15.vibe.API.UserAPI;
 import cs490.team_15.vibe.API.models.User;
 
@@ -27,6 +32,7 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
     User DJ;
     int djID;
     String djName;
+    Timer timer;
 
     public DjFragment() {
     }
@@ -55,6 +61,46 @@ public class DjFragment extends ListFragment implements AdapterView.OnItemClickL
             UserAPI.getAllUsers(this.mUserArrayAdapter);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
+        }
+
+        setTimerForAdvertise();
+
+    }
+
+    void setTimerForAdvertise() {
+        timer = new Timer();
+        TimerTask updateProfile = new CustomTimerTask();
+        timer.scheduleAtFixedRate(updateProfile, 5000, 5000);
+    }
+
+    public class CustomTimerTask extends TimerTask
+    {
+
+        private Handler mHandler = new Handler();
+
+        @Override
+        public void run()
+        {
+            new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    mHandler.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            try {
+                                UserAPI.getAllUsers(mUserArrayAdapter);
+                            } catch (Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }).start();
+
         }
 
     }
