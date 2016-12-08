@@ -6,8 +6,11 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 import cs490.team_15.vibe.API.RequestAPI;
 import cs490.team_15.vibe.API.models.Request;
@@ -20,6 +23,8 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
 
     static ArrayAdapter<Request> mRequestArrayAdapter;
     static RequestFragment mCurrentInstance;
+
+    private View hiddenPanel;
 
     public RequestFragment() {
     }
@@ -40,6 +45,14 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_request, container, false);
+        hiddenPanel = view.findViewById(R.id.hidden_panel);
+        Button temp = (Button) view.findViewById(R.id.cancelButton);
+        temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                slideUpDown();
+            }
+        });
         return view;
     }
 
@@ -61,8 +74,9 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        slideUpDown();
         if (MainActivity.isLoggedIn()) {    // Is a DJ - Add song to playlist
-
+            slideUpDown();
         }
         else {                              // Is a partier
             adapterView.setSelection(i);
@@ -75,5 +89,22 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
                 throwable.printStackTrace();
             }
         }
+    }
+
+    public void slideUpDown() {
+        if (!isPanelShown()) {
+            Animation bottomUp = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_up);
+            hiddenPanel.startAnimation(bottomUp);
+            hiddenPanel.setVisibility(View.VISIBLE);
+        }
+        else {
+            Animation bottomDown = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_down);
+            hiddenPanel.startAnimation(bottomDown);
+            hiddenPanel.setVisibility(View.GONE);
+        }
+    }
+
+    private boolean isPanelShown() {
+        return hiddenPanel.getVisibility() == View.VISIBLE;
     }
 }
