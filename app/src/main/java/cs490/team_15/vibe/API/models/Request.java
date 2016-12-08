@@ -59,9 +59,16 @@ public class Request {
 
     @Override
     public String toString() {
-        return numVotes +
-                " - " + songName +
-                " - " + artistName +
-                " - " + albumName;
+
+        if (numVotes == 0) {
+            return
+                    songName + " - " + artistName + " - " + albumName;
+        } else {
+
+            return numVotes +
+                    " - " + songName +
+                    " - " + artistName +
+                    " - " + albumName;
+        }
     }
 }

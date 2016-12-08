@@ -13,7 +13,8 @@
         android:layout_marginTop="10dp"
         android:id="@+id/search"/>
         android:queryHint="@string/search_hint"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTmProgress = (ProgressBar) findViewById(R.id.progress_bar);op="10dp" />
+
 
     <ListView
         android:id="@android:id/list"
