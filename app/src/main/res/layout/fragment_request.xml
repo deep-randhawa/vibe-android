@@ -41,6 +41,19 @@
             android:gravity="center"
             android:paddingTop="7dp"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_blue_dark"
+            android:layout_below="@id/cancelButton"/>
+
+        <ListView
+            android:id="@+id/playlistListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/cancelButton"
+            android:paddingTop="8dp"></ListView>
+
     </RelativeLayout>
 
 </RelativeLayout>

@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private Player mPlayer;
-    private String mAccessToken;
+    private static String mAccessToken;
     private AuthenticationRequest mAuthRequest;
 
     private static boolean mLoggedIn = false;
@@ -73,9 +73,18 @@ public class MainActivity extends AppCompatActivity implements
     private static final String REDIRECT_URI = "localhost://callback";
     private static final int REQUEST_CODE = 1337;
 
+    public static String getAccessToken() {
+        return mAccessToken;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*try {
+            UserAPI.deleteUser(new User(10, "Austin Dewey", "adewey4", null), getApplicationContext());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }*/
         setContentView(R.layout.activity_main);
         mResources = getResources();
 
