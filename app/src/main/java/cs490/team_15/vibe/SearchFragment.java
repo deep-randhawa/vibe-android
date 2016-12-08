@@ -38,10 +38,14 @@ import java.util.HashSet;
 
 public class SearchFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
+    private static ProgressBar mProgressBar;
+    private static View mView;
+
     static ArrayAdapter<Request> mSongArrayAdapter;
     Request request;
 
-    public SearchFragment() {}
+    public SearchFragment() {
+    }
 
     public static SearchFragment newInstance() {
         SearchFragment fragment = new SearchFragment();
@@ -61,6 +65,7 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
             public boolean onQueryTextSubmit(String s) {
                 // TODO: Create async task to get Spotify search results
                 new GetSearchResultsTask().execute(s);
+                mProgressBar.setVisibility(View.VISIBLE);
                 return false;
             }
 
@@ -73,6 +78,10 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
         sv.setSubmitButtonEnabled(true);
         sv.setIconifiedByDefault(false);
 
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.INVISIBLE);
+
+        mView = rootView;
         return rootView;
     }
 
@@ -87,8 +96,7 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
             for (int i = 0; i < temp.length(); i++) {
                 if (temp.charAt(i) == ' ') {
                     withoutSpaces += "%20";
-                }
-                else {
+                } else {
                     withoutSpaces += temp.charAt(i);
                 }
             }
@@ -120,6 +128,12 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
 
         @Override
         protected void onPostExecute(String result) {
+            SearchFragment.mProgressBar.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    SearchFragment.mProgressBar.setVisibility(View.INVISIBLE);
+                }
+            });
             mSongArrayAdapter.clear();
             try {
                 JSONObject json = new JSONObject(result);
@@ -151,11 +165,10 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         adapterView.setSelection(i);
-        Request sr = (Request)adapterView.getItemAtPosition(i);
+        Request sr = (Request) adapterView.getItemAtPosition(i);
         if (MainActivity.getCurrentUser() == null) {
             System.out.println("NULL!!!");
-        }
-        else {
+        } else {
             try {
                 sr.userID = MainActivity.getCurrentUser().id;
                 RequestAPI.createNewRequest(sr, getContext());
