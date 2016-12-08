@@ -54,6 +54,8 @@
     <integer name="spotify_request_code">1337</integer>
     <string-array name="spotify_scopes">
         <item>user-read-private</item>
+        <item>playlist-modify-private</item>
+        <item>playlist-modify</item>
         <item>streaming</item>
     </string-array>
 

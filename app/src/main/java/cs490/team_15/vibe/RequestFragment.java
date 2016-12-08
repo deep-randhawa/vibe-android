@@ -19,16 +19,23 @@ import android.widget.ListView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,6 +56,8 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
 
     private View hiddenPanel;
     private ListView playlistLV;
+
+    private Request selRequest;
 
     ArrayList<Playlist> playlists = new ArrayList<Playlist>();
 
@@ -119,6 +128,20 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
         playlistLV = (ListView) view.findViewById(R.id.playlistListView);
         playlists.add(new Playlist("asdf", "url", "id"));
         playlistLV.setAdapter(new PlaylistAdapter(getContext(), playlists));
+        playlistLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Playlist temp = playlists.get(i);
+                // TODO: Add selected song to the selected playlist
+                String uri = "spotify:track:" + selRequest.songID;
+                String ownerID = MainActivity.getCurrentUser().spotifyID;
+                String playlistID = temp.getId();
+                /*System.out.println("uri: " + uri);
+                System.out.println("ownerID: " + ownerID);
+                System.out.println("playlistID: " + playlistID);*/
+                new AddSongToPlaylistTask().execute(MainActivity.getAccessToken(), ownerID, playlistID, uri);
+            }
+        });
         return view;
     }
 
@@ -143,11 +166,14 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         //slideUpDown();
         if (MainActivity.isLoggedIn()) {    // Is a DJ - Add song to playlist
+            adapterView.setSelection(i);
+            selRequest = (Request)adapterView.getItemAtPosition(i);
             slideUpDown();
         }
         else {                              // Is a partier
             adapterView.setSelection(i);
             Request r = (Request)adapterView.getItemAtPosition(i);
+            selRequest = r;
             Request newR = new Request(r.userID, r.songID, r.numVotes, r.songName, r.artistName, r.albumName);
             try {
                 if (songSet.contains(r.songID)) {
@@ -229,6 +255,53 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private class AddSongToPlaylistTask extends AsyncTask<String, Void, String> {
+
+        private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for(Map.Entry<String, String> entry : params.entrySet()){
+                if (first)
+                    first = false;
+                else
+                    result.append("&");
+
+                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            }
+
+            return result.toString();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String s = "";
+            URL url;
+            HttpURLConnection urlConnection = null;
+            System.out.println("Entering");
+            try {
+                String userID = strings[1];
+                String playlistID = strings[2];
+                String trackID = strings[3];
+                url = new URL("https://api.spotify.com/v1/users/" + userID + "/playlists/" + playlistID + "/tracks?uris="+trackID);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setRequestProperty("Authorization", "Bearer " + strings[0]);
+                int statusCode = urlConnection.getResponseCode();
+                System.out.println(statusCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            return s;
         }
     }
 }

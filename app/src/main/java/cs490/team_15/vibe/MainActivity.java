@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /*try {
-            UserAPI.deleteUser(new User(10, "Austin Dewey", "adewey4", null), getApplicationContext());
+            UserAPI.deleteUser(new User(30, "Austin Dewey", "adewey4", null), getApplicationContext());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }*/
