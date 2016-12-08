@@ -61,7 +61,7 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        if (MainActivity.isLoggedIn()) {    // Is a DJ
+        if (MainActivity.isLoggedIn()) {    // Is a DJ - Add song to playlist
 
         }
         else {                              // Is a partier
