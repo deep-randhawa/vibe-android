@@ -57,5 +57,8 @@ public class Globals {
 
         @DELETE("/request/{user_id}")
         Call<String> deleteRequests(@Path("user_id") Integer userID);
+
+        @DELETE("/request/req/{id}")
+        Call<String> deleteSpecificRequest(@Path("id") Integer id);
     }
 }

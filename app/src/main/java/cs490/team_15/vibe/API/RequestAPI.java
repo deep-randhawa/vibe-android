@@ -3,6 +3,7 @@ package cs490.team_15.vibe.API;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,5 +69,16 @@ public class RequestAPI {
     }
 
     // TODO: Delete a specific request
+    public static void deleteSpecificRequest(Integer id, final Context currentActivityContext) throws Throwable {
+        if (id == null)
+            return;
+        Call<String> call_str = Globals.requestAPI.deleteSpecificRequest(id);
+        call_str.enqueue(new VibeCallback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(currentActivityContext, "Added to playlist", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
 
