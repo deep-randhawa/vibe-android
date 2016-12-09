@@ -58,7 +58,6 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     private ListView playlistLV;
 
     private Request selRequest;
-
     ArrayList<Playlist> playlists = new ArrayList<Playlist>();
 
     public RequestFragment() {

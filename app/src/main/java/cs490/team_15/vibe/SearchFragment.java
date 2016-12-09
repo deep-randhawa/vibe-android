@@ -5,18 +5,21 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,13 +39,15 @@ import java.util.HashSet;
  * Created by Austin Dewey on 12/5/2016.
  */
 
-public class SearchFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class SearchFragment extends Fragment {
 
     private static ProgressBar mProgressBar;
     private static View mView;
 
-    static ArrayAdapter<Request> mSongArrayAdapter;
+    static ArrayList<Request> mSongArrayAdapter = new ArrayList<Request>();
     Request request;
+
+    static ListView searchLV;
 
     public SearchFragment() {
     }
@@ -82,6 +87,27 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
         mProgressBar.setVisibility(View.INVISIBLE);
 
         mView = rootView;
+
+        searchLV = (ListView) mView.findViewById(R.id.searchListView);
+        searchLV.setAdapter(new SearchAdapter(getContext(), mSongArrayAdapter));
+        searchLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Request sr = mSongArrayAdapter.get(i);
+                if (MainActivity.getCurrentUser() == null) {
+                    Toast.makeText(getContext(), "You are not connected to a DJ", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    try {
+                        sr.userID = MainActivity.getCurrentUser().id;
+                        RequestAPI.createNewRequest(sr, getContext());
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -146,6 +172,7 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
                     mSongArrayAdapter.add(new Request(null, null, songID, numVotes, songName, artistName, albumName));
                     //mSongArrayAdapter.add(new SearchResult(id, name, artist, album));
                 }
+                ((SearchAdapter)searchLV.getAdapter()).notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -153,16 +180,12 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
         }
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.mSongArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
-        setListAdapter(this.mSongArrayAdapter);
-        getListView().setOnItemClickListener(this);
     }
 
-    @Override
+    /*@Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         adapterView.setSelection(i);
         Request sr = (Request) adapterView.getItemAtPosition(i);
@@ -176,5 +199,5 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
                 throwable.printStackTrace();
             }
         }
-    }
+    }*/
 }

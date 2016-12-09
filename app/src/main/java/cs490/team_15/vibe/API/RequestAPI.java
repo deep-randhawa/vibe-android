@@ -40,7 +40,7 @@ public class RequestAPI {
         call_request.enqueue(new VibeCallback<Request>() {
             @Override
             public void onResponse(Call<Request> call, Response<Request> response) {
-                Toast.makeText(currentActivityContext, "Created new Request", Toast.LENGTH_SHORT).show();
+                Toast.makeText(currentActivityContext, "Request Sent!", Toast.LENGTH_SHORT).show();
             }
         });
     }
