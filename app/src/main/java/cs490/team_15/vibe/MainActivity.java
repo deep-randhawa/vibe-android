@@ -80,8 +80,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO: Delete this try/catch block before demo
         try {
-            UserAPI.deleteUser(new User(44, "Austin Dewey", "adewey4", null), getApplicationContext());
+            UserAPI.deleteUser(new User(50, "Austin Dewey", "adewey4", null), getApplicationContext());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }

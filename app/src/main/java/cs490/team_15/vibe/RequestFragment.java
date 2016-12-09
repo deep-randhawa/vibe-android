@@ -138,9 +138,6 @@ public class RequestFragment extends Fragment {
                 String uri = "spotify:track:" + selRequest.songID;
                 String ownerID = MainActivity.getCurrentUser().spotifyID;
                 String playlistID = temp.getId();
-                /*System.out.println("uri: " + uri);
-                System.out.println("ownerID: " + ownerID);
-                System.out.println("playlistID: " + playlistID);*/
                 new AddSongToPlaylistTask().execute(MainActivity.getAccessToken(), ownerID, playlistID, uri);
                 slideUpDown();
                 Toast.makeText(getContext(), "Added to playlist!", Toast.LENGTH_SHORT).show();
@@ -187,9 +184,6 @@ public class RequestFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //this.mRequestArrayAdapter = new RequestAdapter(getContext(), R.layout.request_row_layout);
-        //setListAdapter(this.mRequestArrayAdapter);
-        //getListView().setOnItemClickListener(this);
     }
 
     public void onLoggedIn(int id) {
