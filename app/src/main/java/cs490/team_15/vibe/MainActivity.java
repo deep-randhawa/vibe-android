@@ -80,11 +80,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*try {
-            UserAPI.deleteUser(new User(30, "Austin Dewey", "adewey4", null), getApplicationContext());
+        try {
+            UserAPI.deleteUser(new User(44, "Austin Dewey", "adewey4", null), getApplicationContext());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
-        }*/
+        }
         setContentView(R.layout.activity_main);
         mResources = getResources();
 

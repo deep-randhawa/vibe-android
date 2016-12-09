@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +49,7 @@ import cs490.team_15.vibe.API.models.Request;
  * Created by Austin Dewey on 11/29/2016.
  */
 
-public class RequestFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class RequestFragment extends Fragment {
 
     static ArrayAdapter<Request> mRequestArrayAdapter;
     static RequestFragment mCurrentInstance;
@@ -56,6 +58,8 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
 
     private View hiddenPanel;
     private ListView playlistLV;
+
+    private ListView requestLV;
 
     private Request selRequest;
     ArrayList<Playlist> playlists = new ArrayList<Playlist>();
@@ -131,7 +135,6 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Playlist temp = playlists.get(i);
-                // TODO: Add selected song to the selected playlist
                 String uri = "spotify:track:" + selRequest.songID;
                 String ownerID = MainActivity.getCurrentUser().spotifyID;
                 String playlistID = temp.getId();
@@ -139,6 +142,43 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
                 System.out.println("ownerID: " + ownerID);
                 System.out.println("playlistID: " + playlistID);*/
                 new AddSongToPlaylistTask().execute(MainActivity.getAccessToken(), ownerID, playlistID, uri);
+                slideUpDown();
+                Toast.makeText(getContext(), "Added to playlist!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //this.mRequestArrayAdapter = new RequestAdapter(getContext(), R.layout.request_row_layout);
+        //setListAdapter(this.mRequestArrayAdapter);
+        //getListView().setOnItemClickListener(this);
+        ArrayList<Request> r = new ArrayList<Request>();
+        this.mRequestArrayAdapter = new RequestAdapter(getContext(), R.layout.request_row_layout, r);
+        requestLV = (ListView) view.findViewById(R.id.requestListView);
+        requestLV.setAdapter(this.mRequestArrayAdapter);
+        requestLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                /*Request r = mRequestArrayAdapter.getItem(i);
+                System.out.println(r);*/
+                if (MainActivity.isLoggedIn()) { // Is a DJ - Add song to playlist
+                    selRequest = mRequestArrayAdapter.getItem(i);
+                    slideUpDown();
+                }
+                else {                           // Is a partier
+                    Request r = mRequestArrayAdapter.getItem(i);
+                    Request newR = new Request(r.userID, r.songID, r.numVotes, r.songName, r.artistName, r.albumName);
+                    try {
+                        if (songSet.contains(r.songID)) {
+                            return;
+                        }
+                        RequestAPI.voteOnSong(r.userID, r.songID, getContext());
+
+                        songSet.add(r.songID);
+
+                        RequestAPI.getAllRequests(MainActivity.getCurrentUser(), mRequestArrayAdapter);
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                }
             }
         });
         return view;
@@ -147,10 +187,9 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.mRequestArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
-        setListAdapter(this.mRequestArrayAdapter);
-        getListView().setOnItemClickListener(this);
-        //slideUpDown();  // TODO: Delete this after playlist implementation
+        //this.mRequestArrayAdapter = new RequestAdapter(getContext(), R.layout.request_row_layout);
+        //setListAdapter(this.mRequestArrayAdapter);
+        //getListView().setOnItemClickListener(this);
     }
 
     public void onLoggedIn(int id) {
@@ -158,35 +197,6 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
             RequestAPI.getAllRequests(MainActivity.getCurrentUser(), this.mRequestArrayAdapter);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        //slideUpDown();
-        if (MainActivity.isLoggedIn()) {    // Is a DJ - Add song to playlist
-            adapterView.setSelection(i);
-            selRequest = (Request)adapterView.getItemAtPosition(i);
-            slideUpDown();
-        }
-        else {                              // Is a partier
-            adapterView.setSelection(i);
-            Request r = (Request)adapterView.getItemAtPosition(i);
-            selRequest = r;
-            Request newR = new Request(r.userID, r.songID, r.numVotes, r.songName, r.artistName, r.albumName);
-            try {
-                if (songSet.contains(r.songID)) {
-                    return;
-                }
-                RequestAPI.voteOnSong(r.userID, r.songID, getContext());
-
-                songSet.add(r.songID);
-
-                RequestAPI.getAllRequests(MainActivity.getCurrentUser(), this.mRequestArrayAdapter);
-                // RequestAPI.createNewRequest(newR, getContext());
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
         }
     }
 
@@ -258,23 +268,6 @@ public class RequestFragment extends ListFragment implements AdapterView.OnItemC
     }
 
     private class AddSongToPlaylistTask extends AsyncTask<String, Void, String> {
-
-        private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-            StringBuilder result = new StringBuilder();
-            boolean first = true;
-            for(Map.Entry<String, String> entry : params.entrySet()){
-                if (first)
-                    first = false;
-                else
-                    result.append("&");
-
-                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-                result.append("=");
-                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-            }
-
-            return result.toString();
-        }
 
         @Override
         protected String doInBackground(String... strings) {
