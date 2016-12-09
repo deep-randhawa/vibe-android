@@ -183,6 +183,8 @@ public class MainActivity extends AppCompatActivity implements
         MenuItem item = menu.findItem(R.id.action_login);
         item.setTitle("DJ Login");
         try {
+            // TODO: The deleteRequests call does not work
+            RequestAPI.deleteRequests(getCurrentUser(), getApplicationContext());
             UserAPI.deleteUser(getCurrentUser(), getApplicationContext());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
@@ -330,7 +332,6 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
             return 3;
         }
 

@@ -7,14 +7,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dp"
+        android:textSize="22dp"
         android:id="@+id/songNameTextView"
         android:textColor="@color/Black"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:textSize="12dp"
         android:id="@+id/artistNameTextView"
         android:textColor="@color/Black"
         android:layout_below="@id/songNameTextView"/>
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/albumNameTextView"
-        android:textSize="15dp"
+        android:textSize="12dp"
         android:textColor="@color/Black"
         android:layout_below="@id/songNameTextView"
         android:layout_toRightOf="@id/searchDot1"
