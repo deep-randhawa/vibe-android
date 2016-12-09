@@ -87,7 +87,7 @@ public class SearchFragment extends ListFragment implements AdapterView.OnItemCl
 
     private static class GetSearchResultsTask extends AsyncTask<String, Void, String> {
 
-        private final int LIMIT = 10;
+        private final int LIMIT = 5;
 
         @Override
         protected String doInBackground(String... strings) {

@@ -14,20 +14,18 @@
     android:queryHint="@string/search_hint"
     android:layout_marginTmProgress = (ProgressBar) findViewById(R.id.progress_bar);op="10dp" />
 
-
     <ProgressBar
         android:id="@+id/progress_bar"
         style="@android:style/Widget.Material.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         android:indeterminate="true" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:paddingTop="10dp"></ListView>
+        android:choiceMode="singleChoice"></ListView>
 
     <TextView
         android:id="@android:id/empty"
